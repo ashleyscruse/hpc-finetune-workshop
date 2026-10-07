@@ -80,8 +80,9 @@ def main() -> int:
 
     paths = fetch_parquet(shared / "raw")
     df = sample_balanced(paths, TRAIN_PER_CLASS + TEST_PER_CLASS, args.seed)
+    df = df.reset_index(drop=True)  # rows from different files share index labels
 
-    test = df.groupby("label", group_keys=False).apply(lambda g: g.head(TEST_PER_CLASS))
+    test = df.groupby("label").head(TEST_PER_CLASS)
     train = df.drop(test.index)
     train = train.sample(frac=1, random_state=args.seed).reset_index(drop=True)
     test = test.sample(frac=1, random_state=args.seed).reset_index(drop=True)
