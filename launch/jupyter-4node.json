@@ -1,0 +1,14 @@
+{
+  "name": "jupyter-scale",
+  "appId": "jupyter-hpc-native",
+  "appVersion": "vista",
+  "execSystemLogicalQueue": "gh",
+  "nodeCount": 4,
+  "maxMinutes": 90,
+  "parameterSet": {
+    "schedulerOptions": [
+      { "name": "TACC Allocation", "arg": "-A TRA25008" },
+      { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" }
+    ]
+  }
+}

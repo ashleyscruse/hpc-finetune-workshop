@@ -1,0 +1,9 @@
+CLAUDE.md
+.claude/
+__pycache__/
+.ipynb_checkpoints/
+*.parquet
+*.csv
+*.zip
+outputs/
+logs/

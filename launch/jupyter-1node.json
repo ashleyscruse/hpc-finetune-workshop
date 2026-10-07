@@ -1,0 +1,14 @@
+{
+  "name": "jupyter-finetune",
+  "appId": "jupyter-hpc-native",
+  "appVersion": "vista",
+  "execSystemLogicalQueue": "gh",
+  "nodeCount": 1,
+  "maxMinutes": 100,
+  "parameterSet": {
+    "schedulerOptions": [
+      { "name": "TACC Allocation", "arg": "-A TRA25008" },
+      { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" }
+    ]
+  }
+}
