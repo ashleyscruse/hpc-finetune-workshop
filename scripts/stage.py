@@ -1,7 +1,7 @@
 """Stage the data and the model once, in a shared folder every participant can read.
 
 Run by the instructor before the workshop, inside a compute-node session (not on a
-login node; the CSV pass needs the memory):
+login node; the sampling pass needs the memory):
 
     python scripts/stage.py --shared /path/to/shared
 
@@ -13,10 +13,7 @@ Writes:
 
 import argparse
 import pathlib
-import shutil
 import sys
-import urllib.request
-import zipfile
 
 import numpy as np
 import pandas as pd
@@ -24,37 +21,37 @@ import pandas as pd
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from labels import LABELS, product_to_label  # noqa: E402
 
-CCDB_ZIP = "https://files.consumerfinance.gov/ccdb/complaints.csv.zip"
+# CFPB stopped publishing complaint narratives in its bulk download (2026), so we use a
+# CC0 mirror of its earlier export: only the complaints that have narrative text.
+DATA_REPO = "BEE-spoke-data/consumer-finance-complaints"
+DATA_FILES = [f"has-text/train-0000{i}-of-00003.parquet" for i in range(3)]
 DEFAULT_MODEL = "Qwen/Qwen2.5-0.5B"
 TRAIN_PER_CLASS = 20_000
 TEST_PER_CLASS = 500
 MAX_CHARS = 2_000  # narratives longer than this are cut; the model only reads ~256 tokens
 
 
-def fetch_csv(raw: pathlib.Path) -> pathlib.Path:
+def fetch_parquet(raw: pathlib.Path) -> list[pathlib.Path]:
+    from huggingface_hub import hf_hub_download
+
     raw.mkdir(parents=True, exist_ok=True)
-    zip_path, csv_path = raw / "complaints.csv.zip", raw / "complaints.csv"
-    if not zip_path.exists():
-        print(f"downloading {CCDB_ZIP}")
-        with urllib.request.urlopen(CCDB_ZIP) as r, open(zip_path, "wb") as f:
-            shutil.copyfileobj(r, f)
-    if not csv_path.exists():
-        print("unzipping")
-        with zipfile.ZipFile(zip_path) as z:
-            z.extractall(raw)
-    return csv_path
+    return [
+        pathlib.Path(hf_hub_download(DATA_REPO, f, repo_type="dataset", local_dir=raw))
+        for f in DATA_FILES
+    ]
 
 
-def sample_balanced(csv_path: pathlib.Path, per_class: int, seed: int) -> pd.DataFrame:
-    """Stream the CSV and keep a uniform random sample of `per_class` rows per category.
+def sample_balanced(paths: list[pathlib.Path], per_class: int, seed: int) -> pd.DataFrame:
+    """Read the files one at a time and keep a uniform random sample of `per_class` rows per category.
 
     Each row gets a random priority; per category we keep the lowest `per_class`
-    priorities seen so far. That is a uniform sample without holding 10M rows at once.
+    priorities seen so far. That is a uniform sample without holding every complaint at once.
     """
     rng = np.random.default_rng(seed)
     kept = {name: pd.DataFrame() for name in LABELS}
     cols = ["Product", "Consumer complaint narrative"]
-    for i, chunk in enumerate(pd.read_csv(csv_path, usecols=cols, chunksize=500_000)):
+    for i, path in enumerate(paths):
+        chunk = pd.read_parquet(path, columns=cols)
         chunk = chunk.dropna(subset=["Consumer complaint narrative"])
         chunk["label"] = chunk["Product"].map(product_to_label)
         chunk = chunk.dropna(subset=["label"])
@@ -81,8 +78,8 @@ def main() -> int:
     data = shared / "data"
     data.mkdir(parents=True, exist_ok=True)
 
-    csv_path = fetch_csv(shared / "raw")
-    df = sample_balanced(csv_path, TRAIN_PER_CLASS + TEST_PER_CLASS, args.seed)
+    paths = fetch_parquet(shared / "raw")
+    df = sample_balanced(paths, TRAIN_PER_CLASS + TEST_PER_CLASS, args.seed)
 
     test = df.groupby("label", group_keys=False).apply(lambda g: g.head(TEST_PER_CLASS))
     train = df.drop(test.index)

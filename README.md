@@ -25,9 +25,11 @@ speedup and efficiency, chart them, and explain the gap from perfect scaling.
 ## The data
 
 The [CFPB Consumer Complaint Database](https://www.consumerfinance.gov/data-research/consumer-complaints/),
-a US federal public-domain dataset of roughly 10 million complaints. `scripts/stage.py`
-streams the bulk CSV once and keeps a balanced sample: 20,000 training and 500 test
-complaints for each category.
+a US federal public-domain dataset. CFPB no longer publishes the complaint text in its
+bulk download, so `scripts/stage.py` reads an earlier export from the CC0 mirror
+[BEE-spoke-data/consumer-finance-complaints](https://huggingface.co/datasets/BEE-spoke-data/consumer-finance-complaints)
+(about 1.7 million complaints with text, 2015 to 2024) and keeps a balanced sample:
+20,000 training and 500 test complaints for each category.
 
 | Category | CFPB products it covers |
 |---|---|
