@@ -48,7 +48,9 @@
        letter-spacing: .05em; }
   footer { margin-top: 64px; padding: 26px 16px; background: var(--light); color: var(--ink2);
            font: 700 13px Arial, Helvetica, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .fields td:last-child { white-space: nowrap; }
   @media (max-width: 600px) {
+    .fields td:last-child { white-space: normal; }
     body { font-size: 18px; }
     .step { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
     .num { font-size: 30px; }
@@ -82,18 +84,21 @@
 
 <div class="step"><div class="num">02</div><div>
   <h3>Start your GPU session</h3>
-  <p>Click <b>Jobs</b>, then submit this job. Paste it exactly as written.</p>
-  <div class="code"><button class="copy">Copy</button><pre><code>{ "name": "jupyter-finetune",
-  "appId": "jupyter-hpc-native", "appVersion": "vista",
-  "execSystemLogicalQueue": "gh", "nodeCount": 1, "maxMinutes": 100,
-  "parameterSet": { "schedulerOptions": [
-    { "name": "TACC Allocation",  "arg": "-A TRA25008" },
-    { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" } ] } }</code></pre></div>
+  <p>Click <b>Apps</b>, choose the Jupyter app for Vista, click <b>Submit Job</b>, then choose <b>Use Guided Job Launcher</b>. Click through each section and change only these:</p>
+  <table class="fields">
+    <tr><th>Section</th><th>Field</th><th>Set it to</th></tr>
+    <tr><td>Execution Options</td><td>Batch Logical Queue</td><td><code>gh</code></td></tr>
+    <tr><td>Execution Options</td><td>Nodes</td><td><code>1</code></td></tr>
+    <tr><td>Execution Options</td><td>Max minutes</td><td><code>100</code></td></tr>
+    <tr><td>Scheduler Options</td><td>TACC Resource Allocation</td><td><code>-A TRA25008</code></td></tr>
+    <tr><td>Scheduler Options</td><td>Reservation Name</td><td><code>--reservation inspireGPU</code></td></tr>
+  </table>
+  <p>Leave everything else as it is, then click <b>Submit</b>.</p>
 </div></div>
 
 <div class="step"><div class="num">03</div><div>
   <h3>Open Jupyter</h3>
-  <p>When your job says it is running, open its output file, <code>tapisjob.out</code>. Copy the address after <b>JUPYTER_URL</b> and open it in a new tab.</p>
+  <p>Click <b>Jobs</b> in the left panel and click your job. When it is running, click the button to open Jupyter. If there is no button, open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
 </div></div>
 
 <div class="step"><div class="num">04</div><div>
@@ -129,13 +134,16 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 
 <div class="step"><div class="num">01</div><div>
   <h3>Driver: start a 4-node session</h3>
-  <p>Same as the morning, but submit this job. It asks for <b>4 nodes</b>.</p>
-  <div class="code"><button class="copy">Copy</button><pre><code>{ "name": "jupyter-scale",
-  "appId": "jupyter-hpc-native", "appVersion": "vista",
-  "execSystemLogicalQueue": "gh", "nodeCount": 4, "maxMinutes": 90,
-  "parameterSet": { "schedulerOptions": [
-    { "name": "TACC Allocation",  "arg": "-A TRA25008" },
-    { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" } ] } }</code></pre></div>
+  <p>Same as the morning, with one change: <b>Nodes</b> is <code>4</code>.</p>
+  <table class="fields">
+    <tr><th>Section</th><th>Field</th><th>Set it to</th></tr>
+    <tr><td>Execution Options</td><td>Batch Logical Queue</td><td><code>gh</code></td></tr>
+    <tr><td>Execution Options</td><td>Nodes</td><td><code>4</code></td></tr>
+    <tr><td>Execution Options</td><td>Max minutes</td><td><code>90</code></td></tr>
+    <tr><td>Scheduler Options</td><td>TACC Resource Allocation</td><td><code>-A TRA25008</code></td></tr>
+    <tr><td>Scheduler Options</td><td>Reservation Name</td><td><code>--reservation inspireGPU</code></td></tr>
+  </table>
+  <p>Leave everything else as it is, then click <b>Submit</b>.</p>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
@@ -154,8 +162,8 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 <p class="lead">Raise your hand. Most problems are one of these:</p>
 <table>
   <tr><th>What you see</th><th>Likely cause</th></tr>
-  <tr><td>Your job waits and never starts</td><td>A typo in the job you pasted, or you still have another job running</td></tr>
-  <tr><td>"multiple projects" error</td><td>The <code>-A TRA25008</code> line is missing from your job</td></tr>
+  <tr><td>Your job waits and never starts</td><td>A typo in the allocation or reservation, or you still have another job running</td></tr>
+  <tr><td>"multiple projects" error</td><td>TACC Resource Allocation is missing <code>-A TRA25008</code></td></tr>
   <tr><td><code>destination path already exists</code></td><td>You already have the workshop folder. Just open it</td></tr>
   <tr><td>"Can't see the shared folder"</td><td>Raise your hand</td></tr>
 </table>
