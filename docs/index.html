@@ -48,9 +48,9 @@
        letter-spacing: .05em; }
   footer { margin-top: 64px; padding: 26px 16px; background: var(--light); color: var(--ink2);
            font: 700 13px Arial, Helvetica, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
-  .fields td:last-child { white-space: nowrap; }
+  .fields td:first-child { white-space: nowrap; font-weight: bold; }
   @media (max-width: 600px) {
-    .fields td:last-child { white-space: normal; }
+    .fields td:first-child { white-space: normal; }
     body { font-size: 18px; }
     .step { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
     .num { font-size: 30px; }
@@ -79,29 +79,38 @@
 
 <div class="step"><div class="num">01</div><div>
   <h3>Log in to the supercomputer portal</h3>
-  <p>Go to <code>morehouse.tapis.io</code> and sign in with your TACC username, password, and the code from your authenticator app.</p>
+  <p>Go to <code>morehouse.tapis.io</code> and click <b>Log in with single sign-on</b>. Enter your TACC username, password, and the code from your authenticator app.</p>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
-  <h3>Start your GPU session</h3>
-  <p>Click <b>Apps</b>, choose the Jupyter app for Vista, click <b>Submit Job</b>, then choose <b>Use Guided Job Launcher</b>. Click through each section and change only these:</p>
-  <table class="fields">
-    <tr><th>Section</th><th>Field</th><th>Set it to</th></tr>
-    <tr><td>Execution Options</td><td>Batch Logical Queue</td><td><code>gh</code></td></tr>
-    <tr><td>Execution Options</td><td>Nodes</td><td><code>1</code></td></tr>
-    <tr><td>Execution Options</td><td>Max minutes</td><td><code>100</code></td></tr>
-    <tr><td>Scheduler Options</td><td>TACC Resource Allocation</td><td><code>-A TRA25008</code></td></tr>
-    <tr><td>Scheduler Options</td><td>Reservation Name</td><td><code>--reservation inspireGPU</code></td></tr>
-  </table>
-  <p>Leave everything else as it is, then click <b>Submit</b>.</p>
+  <h3>Connect your account to Vista</h3>
+  <p>Click <b>Systems</b> in the left panel and find the Vista system. It will say you are not yet authenticated.</p>
+  <p>Click <b>Authenticate with TMS Keys</b>. The status should change.</p>
+  <p><b>Check it worked:</b> click <b>Browse Files</b>. You should see a list of your files.</p>
 </div></div>
 
 <div class="step"><div class="num">03</div><div>
-  <h3>Open Jupyter</h3>
-  <p>Click <b>Jobs</b> in the left panel and click your job. When it is running, click the button to open Jupyter. If there is no button, open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
+  <h3>Start your GPU session</h3>
+  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Use Guided Job Launcher</b>. Go through each page in order:</p>
+  <table class="fields">
+    <tr><th>Page</th><th>What to do</th></tr>
+    <tr><td>Job Basic</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Execution Options</td><td>Job Type: <code>Batch</code><br>Batch Logical Queue: <code>gh</code><br>Nodes: <code>1</code><br>Max minutes: <code>100</code><br>Click <b>Continue</b></td></tr>
+    <tr><td>File Inputs</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Job Arguments</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Job Environment Variables</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Scheduler Options</td><td>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code><br>Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code><br>Click <b>Continue</b></td></tr>
+  </table>
+  <p>Click <b>Submit</b>. When you see the confirmation message, close the window.</p>
 </div></div>
 
 <div class="step"><div class="num">04</div><div>
+  <h3>Open Jupyter</h3>
+  <p>Click <b>Jobs</b> in the left panel and click your job. Wait until it shows the running icon. When the session box appears, click the button to open Jupyter.</p>
+  <p>No button? Open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
+</div></div>
+
+<div class="step"><div class="num">05</div><div>
   <h3>Get the workshop</h3>
   <p>In Jupyter, click <b>File → New → Terminal</b> and type:</p>
   <div class="code"><button class="copy">Copy</button><pre><code>cd $WORK
@@ -109,14 +118,14 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
   <p>Then open <code>hpc-finetune-workshop/notebooks/01-fine-tune.ipynb</code>.</p>
 </div></div>
 
-<div class="step"><div class="num">05</div><div>
+<div class="step"><div class="num">06</div><div>
   <h3>Run it</h3>
   <p>Click a cell and press <b>Shift + Enter</b>. Go top to bottom. A cell is done when the <code>[*]</code> beside it turns into a number.</p>
 </div></div>
 
 <div class="note"><b>WRITE THESE DOWN</b>&nbsp; Your accuracy after training and how many seconds training took. You need both this afternoon.</div>
 
-<div class="step"><div class="num">06</div><div>
+<div class="step"><div class="num">07</div><div>
   <h3>Before lunch: end your session</h3>
   <p>In the portal, open your job and cancel it. This frees your GPU for the afternoon. Your results are saved.</p>
 </div></div>
@@ -134,16 +143,18 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 
 <div class="step"><div class="num">01</div><div>
   <h3>Driver: start a 4-node session</h3>
-  <p>Same as the morning, with one change: <b>Nodes</b> is <code>4</code>.</p>
+  <p>You already connected to Vista this morning, so skip straight to the launcher. Same as the morning, but <b>Nodes is 4</b> and <b>Max minutes is 90</b>.</p>
+  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Use Guided Job Launcher</b>. Go through each page in order:</p>
   <table class="fields">
-    <tr><th>Section</th><th>Field</th><th>Set it to</th></tr>
-    <tr><td>Execution Options</td><td>Batch Logical Queue</td><td><code>gh</code></td></tr>
-    <tr><td>Execution Options</td><td>Nodes</td><td><code>4</code></td></tr>
-    <tr><td>Execution Options</td><td>Max minutes</td><td><code>90</code></td></tr>
-    <tr><td>Scheduler Options</td><td>TACC Resource Allocation</td><td><code>-A TRA25008</code></td></tr>
-    <tr><td>Scheduler Options</td><td>Reservation Name</td><td><code>--reservation inspireGPU</code></td></tr>
+    <tr><th>Page</th><th>What to do</th></tr>
+    <tr><td>Job Basic</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Execution Options</td><td>Job Type: <code>Batch</code><br>Batch Logical Queue: <code>gh</code><br>Nodes: <code>4</code><br>Max minutes: <code>90</code><br>Click <b>Continue</b></td></tr>
+    <tr><td>File Inputs</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Job Arguments</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Job Environment Variables</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Scheduler Options</td><td>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code><br>Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code><br>Click <b>Continue</b></td></tr>
   </table>
-  <p>Leave everything else as it is, then click <b>Submit</b>.</p>
+  <p>Click <b>Submit</b>. When you see the confirmation message, close the window.</p>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
@@ -165,6 +176,7 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
   <tr><td>Your job waits and never starts</td><td>A typo in the allocation or reservation, or you still have another job running</td></tr>
   <tr><td>"multiple projects" error</td><td>TACC Resource Allocation is missing <code>-A TRA25008</code></td></tr>
   <tr><td><code>destination path already exists</code></td><td>You already have the workshop folder. Just open it</td></tr>
+  <tr><td>Can't submit, or Browse Files shows nothing</td><td>Your TMS keys aren't set up. Redo step 02</td></tr>
   <tr><td>"Can't see the shared folder"</td><td>Raise your hand</td></tr>
 </table>
 
