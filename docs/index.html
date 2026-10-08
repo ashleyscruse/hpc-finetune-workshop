@@ -168,22 +168,32 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 
 <div class="step"><div class="num">01</div><div>
   <h3>Driver: start a 4-node session</h3>
-  <p>You already connected to Vista this morning, so skip straight to the launcher. Same as the morning, but <b>Node Count is 4</b> and <b>Maximum Minutes is 90</b>.</p>
-  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Guided job launcher (v2)</b>. Go through each page in order (pictures in step 03 above):</p>
-  <table class="fields">
-    <tr><th>Page</th><th>What to do</th></tr>
-    <tr><td>Job Basics</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Execution Options</td><td>Job Type <code>Batch</code> · Batch Logical Queue <code>gh</code> · Node Count <code>4</code> · Maximum Minutes <code>90</code> · <b>Continue</b></td></tr>
-    <tr><td>File Inputs, Arguments, Environment Variables</td><td>Click <b>Continue</b> on each</td></tr>
-    <tr><td>Scheduler Options</td><td>Allocation <code>TRA25008</code> · Reservation <code>inspireGPU</code> · <b>Continue</b></td></tr>
-    <tr><td>Archiving</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Review &amp; Submit</td><td>Click <b>Submit Job</b></td></tr>
-  </table>
+  <p>You already connected to Vista this morning, so go straight to the launcher. Everyone else on the team: watch the Driver's screen.</p>
+  <div class="sub"><h4>a. Pick the app</h4>
+  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, then click <b>submit job</b>.</p>
+  <figure><img src="img/07-app-submit-job.png" alt="Apps, jupyter-hpc-native, submit job" loading="lazy"><figcaption>Apps, jupyter-hpc-native, submit job</figcaption></figure></div>
+  <div class="sub"><h4>b. Choose the guided launcher</h4>
+  <p>Click <b>Guided job launcher (v2)</b>, then <b>Continue</b> on Job Basics.</p>
+  <figure><img src="img/08-guided-launcher.png" alt="Guided job launcher (v2)" loading="lazy"><figcaption>Guided job launcher (v2)</figcaption></figure></div>
+  <div class="sub"><h4>c. Execution Options: this is the part that changes</h4>
+  <p>Job Type: <code>Batch</code>. Batch Logical Queue: <code>gh</code>. <b>Node Count: <code>4</code>.</b> <b>Maximum Minutes: <code>90</code>.</b> Then <b>Continue</b>.</p>
+  <figure><img src="img/10-execution-options-4node.png" alt="Node Count 4, Maximum Minutes 90" loading="lazy"><figcaption>Node Count 4, Maximum Minutes 90</figcaption></figure></div>
+  <div class="sub"><h4>d. File Inputs, Arguments, Environment Variables</h4>
+  <p>Click <b>Continue</b> on each.</p></div>
+  <div class="sub"><h4>e. Scheduler Options: same as this morning</h4>
+  <p>Allocation <code>TRA25008</code>, reservation <code>inspireGPU</code>. Then <b>Continue</b>.</p>
+  <figure><img src="img/11-scheduler-options.png" alt="Allocation TRA25008, reservation inspireGPU" loading="lazy"><figcaption>Allocation TRA25008, reservation inspireGPU</figcaption></figure></div>
+  <div class="sub"><h4>f. Submit</h4>
+  <p>On <b>Archiving</b>, click <b>Continue</b>. On <b>Review &amp; Submit</b>, click <b>Submit Job</b>.</p>
+  <figure><img src="img/12-review-submit.png" alt="Review & Submit: click Submit Job" loading="lazy"><figcaption>Review & Submit: click Submit Job</figcaption></figure></div>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
-  <h3>Open the notebook</h3>
-  <p>Open Jupyter the same way as this morning. Your workshop folder is already there. Open <code>hpc-finetune-workshop/notebooks/02-make-it-faster.ipynb</code> and run it top to bottom.</p>
+  <h3>Open Jupyter and the notebook</h3>
+  <p>Click <b>Jobs</b> and click your job. Check it shows <code>-A TRA25008</code> and <code>rsv inspireGPU</code>, then wait for it to run and open Jupyter the same way as this morning.</p>
+  <figure><img src="img/13-job-details.png" alt="Your job: our allocation and reservation" loading="lazy"><figcaption>Your job: our allocation and reservation</figcaption></figure>
+  <p>Your workshop folder is already there. Open <code>hpc-finetune-workshop/notebooks/02-make-it-faster.ipynb</code> and run it top to bottom.</p>
+  <p><b>Check:</b> the first cell should list <b>4 different node names</b> and <b>4 GPUs</b>. If it shows only 1, the job was submitted with 1 node. Cancel it and submit again with Node Count 4.</p>
 </div></div>
 
 <div class="note"><b>FOR LIGHTNING SHARES</b>&nbsp; 1-node time · 4-node time · speedup · accuracy · what surprised your team.</div>
