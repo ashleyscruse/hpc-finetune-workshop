@@ -46,6 +46,12 @@
   th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
   th { font: 700 16px Arial, Helvetica, sans-serif; color: var(--maroon); text-transform: uppercase;
        letter-spacing: .05em; }
+  figure { margin: 14px 0 18px; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); background: #fff; }
+  figcaption { font: 15px/1.4 Arial, Helvetica, sans-serif; color: var(--ink2); margin-top: 6px; }
+  .sub { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 16px; }
+  .sub h4 { font: 700 20px/1.3 Arial, Helvetica, sans-serif; color: var(--maroon); margin: 0 0 6px; }
+  .heads-up { background: #fff; border: 2px solid var(--gold); padding: 12px 16px; margin: 12px 0; font-size: 18px; }
   footer { margin-top: 64px; padding: 26px 16px; background: var(--light); color: var(--ink2);
            font: 700 13px Arial, Helvetica, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
   .fields td:first-child { white-space: nowrap; font-weight: bold; }
@@ -80,34 +86,52 @@
 <div class="step"><div class="num">01</div><div>
   <h3>Log in to the supercomputer portal</h3>
   <p>Go to <code>morehouse.tapis.io</code> and click <b>Log in with single sign-on</b>. Enter your TACC username, password, and the code from your authenticator app.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/assets/demo/login-proceed.png" alt="Click Log in with single sign-on" loading="lazy"><figcaption>Click Log in with single sign-on</figcaption></figure>
+  <figure><img src="https://tapis-project.github.io/tutorials/assets/demo/login-sso.png" alt="Enter your TACC username and password, then your MFA code" loading="lazy"><figcaption>Enter your TACC username and password, then your MFA code</figcaption></figure>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
   <h3>Connect your account to Vista</h3>
   <p>Click <b>Systems</b> in the left panel and find the Vista system. It will say you are not yet authenticated.</p>
   <p>Click <b>Authenticate with TMS Keys</b>. The status should change.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/TMS-unauthenticated.png" alt="Systems, then the Vista system, then Authenticate with TMS Keys" loading="lazy"><figcaption>Systems, then the Vista system, then Authenticate with TMS Keys</figcaption></figure>
   <p><b>Check it worked:</b> click <b>Browse Files</b>. You should see a list of your files.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/TMS-authenticated.png" alt="After: ACCESS says listing works, and Browse Files appears" loading="lazy"><figcaption>After: ACCESS says listing works, and Browse Files appears</figcaption></figure>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/ViewFiles.png" alt="Browse Files shows your folders" loading="lazy"><figcaption>Browse Files shows your folders</figcaption></figure>
 </div></div>
 
 <div class="step"><div class="num">03</div><div>
   <h3>Start your GPU session</h3>
-  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Use Guided Job Launcher</b>. Go through each page in order:</p>
-  <table class="fields">
-    <tr><th>Page</th><th>What to do</th></tr>
-    <tr><td>Job Basic</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Execution Options</td><td>Job Type: <code>Batch</code><br>Batch Logical Queue: <code>gh</code><br>Nodes: <code>1</code><br>Max minutes: <code>100</code><br>Click <b>Continue</b></td></tr>
-    <tr><td>File Inputs</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Job Arguments</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Job Environment Variables</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Scheduler Options</td><td>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code><br>Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code><br>Click <b>Continue</b></td></tr>
-  </table>
-  <p>Click <b>Submit</b>. When you see the confirmation message, close the window.</p>
+  <div class="heads-up"><b>Screenshots are from the Tapis tutorial,</b> so they show a different app and different values. Use the values written here: app <code>jupyter-hpc-native</code>, queue <code>gh</code>, allocation <code>TRA25008</code>, reservation <code>inspireGPU</code>.</div>
+  <div class="sub"><h4>a. Pick the app</h4>
+  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, then click <b>Submit Job</b>.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image2.png" alt="Apps, then the app, then Submit Job" loading="lazy"><figcaption>Apps, then the app, then Submit Job</figcaption></figure></div>
+  <div class="sub"><h4>b. Choose the guided launcher</h4>
+  <p>Click <b>Guided job launcher (v2)</b>.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image3.png" alt="Guided job launcher (v2)" loading="lazy"><figcaption>Guided job launcher (v2)</figcaption></figure></div>
+  <div class="sub"><h4>c. Job Basics</h4>
+  <p>Click <b>Continue</b> at the bottom left.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image4.png" alt="Job Basics: just click Continue" loading="lazy"><figcaption>Job Basics: just click Continue</figcaption></figure></div>
+  <div class="sub"><h4>d. Execution Options</h4>
+  <p>Job Type: <code>Batch</code> · Batch Logical Queue: <code>gh</code>. Expand <b>Queue Parameters</b> and set nodes to <code>1</code> and max minutes to <code>100</code>. Then <b>Continue</b>.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image5.png" alt="Execution Options: Job Type and Batch Logical Queue" loading="lazy"><figcaption>Execution Options: Job Type and Batch Logical Queue</figcaption></figure></div>
+  <div class="sub"><h4>e. File Inputs, Job Arguments, Environment Variables</h4>
+  <p>Click <b>Continue</b> on each. Don't change anything.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image6.png" alt="Nothing to change on these pages" loading="lazy"><figcaption>Nothing to change on these pages</figcaption></figure></div>
+  <div class="sub"><h4>f. Scheduler Options</h4>
+  <p>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code>.<br>
+  Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code>. Then <b>Continue</b>.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image10.png" alt="Put our allocation and reservation in these two boxes" loading="lazy"><figcaption>Put our allocation and reservation in these two boxes</figcaption></figure></div>
+  <div class="sub"><h4>g. Submit</h4>
+  <p>On <b>Archiving</b>, click <b>Continue</b>. On <b>Review &amp; Submit</b>, click <b>Submit Job</b>. When you see the confirmation, close the window.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image13.png" alt="Review & Submit: click Submit Job" loading="lazy"><figcaption>Review & Submit: click Submit Job</figcaption></figure></div>
 </div></div>
 
 <div class="step"><div class="num">04</div><div>
   <h3>Open Jupyter</h3>
   <p>Click <b>Jobs</b> in the left panel and click your job. Wait until it shows the running icon. When the session box appears, click the button to open Jupyter.</p>
   <p>No button? Open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
+  <figure><img src="https://tapis-project.github.io/tutorials/images/sec3/image40.png" alt="Jobs, then your job. The session box has the open button; the output files are at the bottom" loading="lazy"><figcaption>Jobs, then your job. The session box has the open button; the output files are at the bottom</figcaption></figure>
 </div></div>
 
 <div class="step"><div class="num">05</div><div>
@@ -144,17 +168,18 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 <div class="step"><div class="num">01</div><div>
   <h3>Driver: start a 4-node session</h3>
   <p>You already connected to Vista this morning, so skip straight to the launcher. Same as the morning, but <b>Nodes is 4</b> and <b>Max minutes is 90</b>.</p>
-  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Use Guided Job Launcher</b>. Go through each page in order:</p>
+  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Guided job launcher (v2)</b>. Go through each page in order:</p>
   <table class="fields">
     <tr><th>Page</th><th>What to do</th></tr>
     <tr><td>Job Basic</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Execution Options</td><td>Job Type: <code>Batch</code><br>Batch Logical Queue: <code>gh</code><br>Nodes: <code>4</code><br>Max minutes: <code>90</code><br>Click <b>Continue</b></td></tr>
+    <tr><td>Execution Options</td><td>Job Type: <code>Batch</code><br>Batch Logical Queue: <code>gh</code><br>Expand <b>Queue Parameters</b>: nodes <code>4</code>, max minutes <code>90</code><br>Click <b>Continue</b></td></tr>
     <tr><td>File Inputs</td><td>Click <b>Continue</b></td></tr>
     <tr><td>Job Arguments</td><td>Click <b>Continue</b></td></tr>
     <tr><td>Job Environment Variables</td><td>Click <b>Continue</b></td></tr>
     <tr><td>Scheduler Options</td><td>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code><br>Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code><br>Click <b>Continue</b></td></tr>
+    <tr><td>Archiving</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Review &amp; Submit</td><td>Click <b>Submit Job</b>, then close the window</td></tr>
   </table>
-  <p>Click <b>Submit</b>. When you see the confirmation message, close the window.</p>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
@@ -182,7 +207,7 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 
 </main>
 
-<footer><div class="wrap">Morehouse Supercomputing Facility · INSPIRE 2026 Student Workshop</div></footer>
+<footer><div class="wrap">Morehouse Supercomputing Facility · INSPIRE 2026 Student Workshop<br><span style="font-weight:400;text-transform:none;letter-spacing:0">Screenshots: <a href="https://tapis-project.github.io/tutorials/">Tapis Project tutorials</a></span></div></footer>
 
 <script>
   document.querySelectorAll('.copy').forEach(function (b) {
