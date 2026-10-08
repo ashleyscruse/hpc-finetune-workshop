@@ -85,39 +85,54 @@
 
 <div class="step"><div class="num">01</div><div>
   <h3>Log in to the supercomputer portal</h3>
-  <p>Go to <code>morehouse.tapis.io</code> and click <b>Log in with single sign-on</b>. Enter your TACC username, password, and the code from your authenticator app.</p>
+  <p>Go to <code>morehouse.tapis.io</code> and click <b>Log in with single sign-on</b>.</p>
+  <figure><img src="img/01-login.png" alt="Click Log in with single sign-on" loading="lazy"><figcaption>Click Log in with single sign-on</figcaption></figure>
+  <p>Enter your TACC username and password, then click <b>Log In</b>.</p>
+  <figure><img src="img/02-username-password.png" alt="Your TACC username and password" loading="lazy"><figcaption>Your TACC username and password</figcaption></figure>
+  <p>Enter the code from your authenticator app and click <b>Submit</b>.</p>
+  <figure><img src="img/03-mfa.png" alt="Your MFA code" loading="lazy"><figcaption>Your MFA code</figcaption></figure>
 </div></div>
 
 <div class="step"><div class="num">02</div><div>
   <h3>Connect your account to Vista</h3>
-  <p>Click <b>Systems</b> in the left panel and find the Vista system. It will say you are not yet authenticated.</p>
-  <p>Click <b>Authenticate with TMS Keys</b>. The status should change.</p>
-  <p><b>Check it worked:</b> click <b>Browse Files</b>. You should see a list of your files.</p>
+  <p>On the dashboard, click <b>Systems</b> in the left panel.</p>
+  <figure><img src="img/04-dashboard.png" alt="Click Systems" loading="lazy"><figcaption>Click Systems</figcaption></figure>
+  <p>Click <b>vista</b>. If it says you are not yet authenticated, click <b>Authenticate with TMS Keys</b>.</p>
+  <p><b>Check it worked:</b> AUTH says <code>hasCredentials: true</code>, ACCESS says <b>listing works</b>, and <b>Browse files</b> shows a list of your folders.</p>
+  <figure><img src="img/05-systems-vista.png" alt="vista, connected: listing works, and your files show below" loading="lazy"><figcaption>vista, connected: listing works, and your files show below</figcaption></figure>
 </div></div>
 
 <div class="step"><div class="num">03</div><div>
   <h3>Start your GPU session</h3>
   <div class="sub"><h4>a. Pick the app</h4>
-  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, then click <b>Submit Job</b>.</p></div>
+  <p>Click <b>Apps</b>, then click <b>jupyter-hpc-native</b>.</p>
+  <figure><img src="img/06-apps.png" alt="Apps, then jupyter-hpc-native" loading="lazy"><figcaption>Apps, then jupyter-hpc-native</figcaption></figure>
+  <p>Click <b>submit job</b> at the top right.</p>
+  <figure><img src="img/07-app-submit-job.png" alt="submit job" loading="lazy"><figcaption>submit job</figcaption></figure></div>
   <div class="sub"><h4>b. Choose the guided launcher</h4>
-  <p>Click <b>Guided job launcher (v2)</b>.</p></div>
+  <p>Click <b>Guided job launcher (v2)</b>.</p>
+  <figure><img src="img/08-guided-launcher.png" alt="Guided job launcher (v2)" loading="lazy"><figcaption>Guided job launcher (v2)</figcaption></figure></div>
   <div class="sub"><h4>c. Job Basics</h4>
-  <p>Click <b>Continue</b> at the bottom left.</p></div>
+  <p>Don't change anything. Click <b>Continue</b> at the bottom left.</p>
+  <figure><img src="img/09-job-basics.png" alt="Job Basics: click Continue" loading="lazy"><figcaption>Job Basics: click Continue</figcaption></figure></div>
   <div class="sub"><h4>d. Execution Options</h4>
-  <p>Job Type: <code>Batch</code> · Batch Logical Queue: <code>gh</code>. Expand <b>Queue Parameters</b> and set nodes to <code>1</code> and max minutes to <code>100</code>. Then <b>Continue</b>.</p></div>
-  <div class="sub"><h4>e. File Inputs, Job Arguments, Environment Variables</h4>
+  <p>Job Type: <code>Batch</code>. Batch Logical Queue: change it to <code>gh</code> (it starts on <code>gh-dev</code>). Node Count: <code>1</code>. Maximum Minutes: <code>120</code>. Then <b>Continue</b>.</p>
+  <figure><img src="img/10-execution-options.png" alt="Job Type, Batch Logical Queue, Node Count, Maximum Minutes" loading="lazy"><figcaption>Job Type, Batch Logical Queue, Node Count, Maximum Minutes</figcaption></figure></div>
+  <div class="sub"><h4>e. File Inputs, Arguments, Environment Variables</h4>
   <p>Click <b>Continue</b> on each. Don't change anything.</p></div>
   <div class="sub"><h4>f. Scheduler Options</h4>
-  <p>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code>.<br>
-  Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code>. Then <b>Continue</b>.</p></div>
+  <p>Make sure the <b>-A allocation</b> and <b>--reservation</b> boxes are checked. Type <code>TRA25008</code> in the allocation box and <code>inspireGPU</code> in the reservation box. Leave the job name row as it is. Then <b>Continue</b>.</p>
+  <figure><img src="img/11-scheduler-options.png" alt="Allocation TRA25008, reservation inspireGPU" loading="lazy"><figcaption>Allocation TRA25008, reservation inspireGPU</figcaption></figure></div>
   <div class="sub"><h4>g. Submit</h4>
-  <p>On <b>Archiving</b>, click <b>Continue</b>. On <b>Review &amp; Submit</b>, click <b>Submit Job</b>. When you see the confirmation, close the window.</p></div>
+  <p>On <b>Archiving</b>, click <b>Continue</b>. On <b>Review &amp; Submit</b>, check that it says <b>The job is ready for submission</b>, then click <b>Submit Job</b>.</p>
+  <figure><img src="img/12-review-submit.png" alt="Review & Submit: click Submit Job" loading="lazy"><figcaption>Review & Submit: click Submit Job</figcaption></figure></div>
 </div></div>
 
 <div class="step"><div class="num">04</div><div>
   <h3>Open Jupyter</h3>
-  <p>Click <b>Jobs</b> in the left panel and click your job. Wait until it shows the running icon. When the session box appears, click the button to open Jupyter.</p>
-  <p>No button? Open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
+  <p>Click <b>Jobs</b> in the left panel and click your job. Check that it shows <code>-A TRA25008</code> and <code>rsv inspireGPU</code>. Its STATUS will change from staging to running.</p>
+  <figure><img src="img/13-job-details.png" alt="Your job: our allocation and reservation, and its status" loading="lazy"><figcaption>Your job: our allocation and reservation, and its status</figcaption></figure>
+  <p>When it is running, click the button to open Jupyter. No button? Open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
 </div></div>
 
 <div class="step"><div class="num">05</div><div>
@@ -153,18 +168,16 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 
 <div class="step"><div class="num">01</div><div>
   <h3>Driver: start a 4-node session</h3>
-  <p>You already connected to Vista this morning, so skip straight to the launcher. Same as the morning, but <b>Nodes is 4</b> and <b>Max minutes is 90</b>.</p>
-  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Guided job launcher (v2)</b>. Go through each page in order:</p>
+  <p>You already connected to Vista this morning, so skip straight to the launcher. Same as the morning, but <b>Node Count is 4</b> and <b>Maximum Minutes is 90</b>.</p>
+  <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, click <b>Submit Job</b>, then choose <b>Guided job launcher (v2)</b>. Go through each page in order (pictures in step 03 above):</p>
   <table class="fields">
     <tr><th>Page</th><th>What to do</th></tr>
-    <tr><td>Job Basic</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Execution Options</td><td>Job Type: <code>Batch</code><br>Batch Logical Queue: <code>gh</code><br>Expand <b>Queue Parameters</b>: nodes <code>4</code>, max minutes <code>90</code><br>Click <b>Continue</b></td></tr>
-    <tr><td>File Inputs</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Job Arguments</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Job Environment Variables</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Scheduler Options</td><td>Expand <b>TACC Resource Allocation</b>. After <code>-A</code>, type a space and <code>TRA25008</code><br>Expand <b>Reservation Name</b>. After <code>--reservation</code>, type a space and <code>inspireGPU</code><br>Click <b>Continue</b></td></tr>
+    <tr><td>Job Basics</td><td>Click <b>Continue</b></td></tr>
+    <tr><td>Execution Options</td><td>Job Type <code>Batch</code> · Batch Logical Queue <code>gh</code> · Node Count <code>4</code> · Maximum Minutes <code>90</code> · <b>Continue</b></td></tr>
+    <tr><td>File Inputs, Arguments, Environment Variables</td><td>Click <b>Continue</b> on each</td></tr>
+    <tr><td>Scheduler Options</td><td>Allocation <code>TRA25008</code> · Reservation <code>inspireGPU</code> · <b>Continue</b></td></tr>
     <tr><td>Archiving</td><td>Click <b>Continue</b></td></tr>
-    <tr><td>Review &amp; Submit</td><td>Click <b>Submit Job</b>, then close the window</td></tr>
+    <tr><td>Review &amp; Submit</td><td>Click <b>Submit Job</b></td></tr>
   </table>
 </div></div>
 
@@ -185,7 +198,7 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 <table>
   <tr><th>What you see</th><th>Likely cause</th></tr>
   <tr><td>Your job waits and never starts</td><td>A typo in the allocation or reservation, or you still have another job running</td></tr>
-  <tr><td>"multiple projects" error</td><td>TACC Resource Allocation is missing <code>-A TRA25008</code></td></tr>
+  <tr><td>"multiple projects" error</td><td>The allocation box is empty or unchecked. It should say <code>TRA25008</code></td></tr>
   <tr><td><code>destination path already exists</code></td><td>You already have the workshop folder. Just open it</td></tr>
   <tr><td>Can't submit, or Browse Files shows nothing</td><td>Your TMS keys aren't set up. Redo step 02</td></tr>
   <tr><td>"Can't see the shared folder"</td><td>Raise your hand</td></tr>
