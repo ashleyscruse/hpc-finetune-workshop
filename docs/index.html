@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fine-Tune It, Then Make It Faster</title>
+<style>
+  :root {
+    --maroon: #840028; --gold: #c1a231; --ink: #1a1a1a; --ink2: #4a4a4a;
+    --light: #f4f1f2; --line: #e2dade; --bg: #ffffff; --code-bg: #1d1416; --code-ink: #f6eef0;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 20px/1.55 Georgia, "Times New Roman", serif; }
+  header { background: var(--maroon); color: #fff; padding: 48px 16px 40px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+  .kicker { color: var(--gold); font: 700 15px/1.2 Arial, Helvetica, sans-serif; letter-spacing: .12em; }
+  h1 { font: 700 clamp(34px, 6vw, 56px)/1.05 Arial, Helvetica, sans-serif; text-transform: uppercase;
+       margin: 12px 0 14px; }
+  header p { margin: 0; font-size: 22px; }
+  nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+  nav a { color: #fff; border: 2px solid var(--gold); padding: 8px 16px; text-decoration: none;
+          font: 700 16px Arial, Helvetica, sans-serif; }
+  nav a:hover { background: var(--gold); color: var(--maroon); }
+  h2 { font: 700 30px/1.2 Arial, Helvetica, sans-serif; color: var(--maroon); text-transform: uppercase;
+       margin: 56px 0 6px; }
+  h2::after { content: ""; display: block; width: 72px; height: 6px; background: var(--gold); margin-top: 12px; }
+  .lead { color: var(--ink2); margin: 16px 0 8px; }
+  .step { display: grid; grid-template-columns: 64px 1fr; gap: 18px; background: var(--light);
+          border-left: 6px solid var(--maroon); padding: 22px 24px; margin: 18px 0; }
+  .num { font: 700 40px/1 Arial, Helvetica, sans-serif; color: var(--gold); }
+  .step h3 { font: 700 24px/1.25 Arial, Helvetica, sans-serif; color: var(--maroon); margin: 2px 0 8px; }
+  .step p { margin: 8px 0; }
+  .step > div { min-width: 0; }
+  code { font: 18px/1.5 Menlo, Consolas, monospace; background: #ece4e7; padding: 1px 6px; }
+  .code { position: relative; margin: 12px 0 4px; }
+  pre { background: var(--code-bg); color: var(--code-ink); margin: 0; padding: 46px 20px 18px;
+        overflow-x: auto; font: 17px/1.55 Menlo, Consolas, monospace; }
+  pre code { background: none; padding: 0; font: inherit; }
+  .copy { position: absolute; top: 10px; right: 10px; background: var(--gold); color: var(--maroon);
+          border: 0; font: 700 14px Arial, Helvetica, sans-serif; padding: 6px 12px; cursor: pointer; }
+  .note { background: var(--maroon); color: #fff; padding: 18px 24px; margin: 22px 0;
+          border-left: 6px solid var(--gold); }
+  .note b { color: var(--gold); font-family: Arial, Helvetica, sans-serif; letter-spacing: .06em; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 19px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 700 16px Arial, Helvetica, sans-serif; color: var(--maroon); text-transform: uppercase;
+       letter-spacing: .05em; }
+  footer { margin-top: 64px; padding: 26px 16px; background: var(--light); color: var(--ink2);
+           font: 700 13px Arial, Helvetica, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  @media (max-width: 600px) {
+    body { font-size: 18px; }
+    .step { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
+    .num { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">INSPIRE 2026 · STUDENT WORKSHOP</div>
+    <h1>Fine-Tune It,<br>Then Make It Faster</h1>
+    <p>Teach a language model to sort real complaints on a supercomputer, then make it faster.</p>
+    <nav>
+      <a href="#morning">Session 1: Fine-tune</a>
+      <a href="#afternoon">Session 2: Make it faster</a>
+      <a href="#stuck">Stuck?</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<h2 id="morning">Session 1: Fine-tune a model</h2>
+<p class="lead">Everyone does this on their own. One GPU each.</p>
+
+<div class="step"><div class="num">01</div><div>
+  <h3>Log in to the supercomputer portal</h3>
+  <p>Go to <code>morehouse.tapis.io</code> and sign in with your TACC username, password, and the code from your authenticator app.</p>
+</div></div>
+
+<div class="step"><div class="num">02</div><div>
+  <h3>Start your GPU session</h3>
+  <p>Click <b>Jobs</b>, then submit this job. Paste it exactly as written.</p>
+  <div class="code"><button class="copy">Copy</button><pre><code>{ "name": "jupyter-finetune",
+  "appId": "jupyter-hpc-native", "appVersion": "vista",
+  "execSystemLogicalQueue": "gh", "nodeCount": 1, "maxMinutes": 100,
+  "parameterSet": { "schedulerOptions": [
+    { "name": "TACC Allocation",  "arg": "-A TRA25008" },
+    { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" } ] } }</code></pre></div>
+</div></div>
+
+<div class="step"><div class="num">03</div><div>
+  <h3>Open Jupyter</h3>
+  <p>When your job says it is running, open its output file, <code>tapisjob.out</code>. Copy the address after <b>JUPYTER_URL</b> and open it in a new tab.</p>
+</div></div>
+
+<div class="step"><div class="num">04</div><div>
+  <h3>Get the workshop</h3>
+  <p>In Jupyter, click <b>File → New → Terminal</b> and type:</p>
+  <div class="code"><button class="copy">Copy</button><pre><code>cd $WORK
+git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></div>
+  <p>Then open <code>hpc-finetune-workshop/notebooks/01-fine-tune.ipynb</code>.</p>
+</div></div>
+
+<div class="step"><div class="num">05</div><div>
+  <h3>Run it</h3>
+  <p>Click a cell and press <b>Shift + Enter</b>. Go top to bottom. A cell is done when the <code>[*]</code> beside it turns into a number.</p>
+</div></div>
+
+<div class="note"><b>WRITE THESE DOWN</b>&nbsp; Your accuracy after training and how many seconds training took. You need both this afternoon.</div>
+
+<div class="step"><div class="num">06</div><div>
+  <h3>Before lunch: end your session</h3>
+  <p>In the portal, open your job and cancel it. This frees your GPU for the afternoon. Your results are saved.</p>
+</div></div>
+
+<h2 id="afternoon">Session 2: Make it faster</h2>
+<p class="lead">You work in a team. Pick your roles first.</p>
+
+<table>
+  <tr><th>Role</th><th>Job</th></tr>
+  <tr><td><b>Driver</b></td><td>The only person who starts a session. Runs the cells.</td></tr>
+  <tr><td><b>Recorder</b></td><td>Writes down the team's predictions before anything runs, then the results.</td></tr>
+  <tr><td><b>Skeptic</b></td><td>Asks why it isn't exactly 4 times faster and checks the math.</td></tr>
+  <tr><td><b>Reporter</b></td><td>Brings the team's numbers to Lightning Shares.</td></tr>
+</table>
+
+<div class="step"><div class="num">01</div><div>
+  <h3>Driver: start a 4-node session</h3>
+  <p>Same as the morning, but submit this job. It asks for <b>4 nodes</b>.</p>
+  <div class="code"><button class="copy">Copy</button><pre><code>{ "name": "jupyter-scale",
+  "appId": "jupyter-hpc-native", "appVersion": "vista",
+  "execSystemLogicalQueue": "gh", "nodeCount": 4, "maxMinutes": 90,
+  "parameterSet": { "schedulerOptions": [
+    { "name": "TACC Allocation",  "arg": "-A TRA25008" },
+    { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" } ] } }</code></pre></div>
+</div></div>
+
+<div class="step"><div class="num">02</div><div>
+  <h3>Open the notebook</h3>
+  <p>Open Jupyter the same way as this morning. Your workshop folder is already there. Open <code>hpc-finetune-workshop/notebooks/02-make-it-faster.ipynb</code> and run it top to bottom.</p>
+</div></div>
+
+<div class="note"><b>FOR LIGHTNING SHARES</b>&nbsp; 1-node time · 4-node time · speedup · accuracy · what surprised your team.</div>
+
+<div class="step"><div class="num">03</div><div>
+  <h3>When you're done: end your session</h3>
+  <p>Driver: cancel the job in the portal so the nodes are freed.</p>
+</div></div>
+
+<h2 id="stuck">Stuck?</h2>
+<p class="lead">Raise your hand. Most problems are one of these:</p>
+<table>
+  <tr><th>What you see</th><th>Likely cause</th></tr>
+  <tr><td>Your job waits and never starts</td><td>A typo in the job you pasted, or you still have another job running</td></tr>
+  <tr><td>"multiple projects" error</td><td>The <code>-A TRA25008</code> line is missing from your job</td></tr>
+  <tr><td><code>destination path already exists</code></td><td>You already have the workshop folder. Just open it</td></tr>
+  <tr><td>"Can't see the shared folder"</td><td>Raise your hand</td></tr>
+</table>
+
+</main>
+
+<footer><div class="wrap">Morehouse Supercomputing Facility · INSPIRE 2026 Student Workshop</div></footer>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.parentElement.querySelector('code').innerText;
+      try {
+        navigator.clipboard.writeText(t).then(function () {
+          b.textContent = 'Copied';
+          setTimeout(function () { b.textContent = 'Copy'; }, 1500);
+        });
+      } catch (e) {}
+    });
+  });
+</script>
+</body>
+</html>
