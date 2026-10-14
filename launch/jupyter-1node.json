@@ -7,8 +7,8 @@
   "maxMinutes": 100,
   "parameterSet": {
     "schedulerOptions": [
-      { "name": "TACC Allocation", "arg": "-A TRA25008" },
-      { "name": "TACC Reservation", "arg": "--reservation=inspireGPU" }
+      { "name": "TACC Allocation", "arg": "-A TRA25001" },
+      { "name": "TACC Reservation", "arg": "--reservation=Workshop-Wed" }
     ]
   }
 }
