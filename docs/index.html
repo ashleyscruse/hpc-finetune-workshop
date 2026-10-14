@@ -121,8 +121,8 @@
   <div class="sub"><h4>e. File Inputs, Arguments, Environment Variables</h4>
   <p>Click <b>Continue</b> on each. Don't change anything.</p></div>
   <div class="sub"><h4>f. Scheduler Options</h4>
-  <p>Make sure the <b>-A allocation</b> and <b>--reservation</b> boxes are checked. Type <code>TRA25008</code> in the allocation box and <code>inspireGPU</code> in the reservation box. Leave the job name row as it is. Then <b>Continue</b>.</p>
-  <figure><img src="img/11-scheduler-options.png" alt="Allocation TRA25008, reservation inspireGPU" loading="lazy"><figcaption>Allocation TRA25008, reservation inspireGPU</figcaption></figure></div>
+  <p>Make sure the <b>-A allocation</b> and <b>--reservation</b> boxes are checked. Type <code>TRA25001</code> in the allocation box and <code>Workshop-Wed</code> in the reservation box. Leave the job name row as it is. Then <b>Continue</b>.</p>
+  <figure><img src="img/11-scheduler-options.png" alt="Allocation TRA25001, reservation Workshop-Wed" loading="lazy"><figcaption>Allocation TRA25001, reservation Workshop-Wed</figcaption></figure></div>
   <div class="sub"><h4>g. Submit</h4>
   <p>On <b>Archiving</b>, click <b>Continue</b>. On <b>Review &amp; Submit</b>, check that it says <b>The job is ready for submission</b>, then click <b>Submit Job</b>.</p>
   <figure><img src="img/12-review-submit.png" alt="Review & Submit: click Submit Job" loading="lazy"><figcaption>Review & Submit: click Submit Job</figcaption></figure></div>
@@ -130,7 +130,7 @@
 
 <div class="step"><div class="num">04</div><div>
   <h3>Open Jupyter</h3>
-  <p>Click <b>Jobs</b> in the left panel and click your job. Check that it shows <code>-A TRA25008</code> and <code>rsv inspireGPU</code>. Its STATUS will change from staging to running.</p>
+  <p>Click <b>Jobs</b> in the left panel and click your job. Check that it shows <code>-A TRA25001</code> and <code>rsv Workshop-Wed</code>. Its STATUS will change from staging to running.</p>
   <figure><img src="img/13-job-details.png" alt="Your job: our allocation and reservation, and its status" loading="lazy"><figcaption>Your job: our allocation and reservation, and its status</figcaption></figure>
   <p>When it is running, click the button to open Jupyter. No button? Open the output file <code>tapisjob.out</code>, copy the address after <b>JUPYTER_URL</b>, and open it in a new tab.</p>
 </div></div>
@@ -181,8 +181,8 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
   <div class="sub"><h4>d. File Inputs, Arguments, Environment Variables</h4>
   <p>Click <b>Continue</b> on each.</p></div>
   <div class="sub"><h4>e. Scheduler Options: same as this morning</h4>
-  <p>Allocation <code>TRA25008</code>, reservation <code>inspireGPU</code>. Then <b>Continue</b>.</p>
-  <figure><img src="img/11-scheduler-options.png" alt="Allocation TRA25008, reservation inspireGPU" loading="lazy"><figcaption>Allocation TRA25008, reservation inspireGPU</figcaption></figure></div>
+  <p>Allocation <code>TRA25001</code>, reservation <code>Workshop-Wed</code>. Then <b>Continue</b>.</p>
+  <figure><img src="img/11-scheduler-options.png" alt="Allocation TRA25001, reservation Workshop-Wed" loading="lazy"><figcaption>Allocation TRA25001, reservation Workshop-Wed</figcaption></figure></div>
   <div class="sub"><h4>f. Submit</h4>
   <p>On <b>Archiving</b>, click <b>Continue</b>. On <b>Review &amp; Submit</b>, click <b>Submit Job</b>.</p>
   <figure><img src="img/12-review-submit.png" alt="Review & Submit: click Submit Job" loading="lazy"><figcaption>Review & Submit: click Submit Job</figcaption></figure></div>
@@ -190,7 +190,7 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 
 <div class="step"><div class="num">02</div><div>
   <h3>Open Jupyter and the notebook</h3>
-  <p>Click <b>Jobs</b> and click your job. Check it shows <code>-A TRA25008</code> and <code>rsv inspireGPU</code>, then wait for it to run and open Jupyter the same way as this morning.</p>
+  <p>Click <b>Jobs</b> and click your job. Check it shows <code>-A TRA25001</code> and <code>rsv Workshop-Wed</code>, then wait for it to run and open Jupyter the same way as this morning.</p>
   <figure><img src="img/13-job-details.png" alt="Your job: our allocation and reservation" loading="lazy"><figcaption>Your job: our allocation and reservation</figcaption></figure>
   <p>Your workshop folder is already there. Open <code>hpc-finetune-workshop/notebooks/02-make-it-faster.ipynb</code> and run it top to bottom.</p>
   <p><b>Check:</b> the first cell should list <b>4 different node names</b> and <b>4 GPUs</b>. If it shows only 1, the job was submitted with 1 node. Cancel it and submit again with Node Count 4.</p>
@@ -208,7 +208,7 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
 <table>
   <tr><th>What you see</th><th>Likely cause</th></tr>
   <tr><td>Your job waits and never starts</td><td>A typo in the allocation or reservation, or you still have another job running</td></tr>
-  <tr><td>"multiple projects" error</td><td>The allocation box is empty or unchecked. It should say <code>TRA25008</code></td></tr>
+  <tr><td>"multiple projects" error</td><td>The allocation box is empty or unchecked. It should say <code>TRA25001</code></td></tr>
   <tr><td><code>destination path already exists</code></td><td>You already have the workshop folder. Just open it</td></tr>
   <tr><td>Can't submit, or Browse Files shows nothing</td><td>Your TMS keys aren't set up. Redo step 02</td></tr>
   <tr><td>"Can't see the shared folder"</td><td>Raise your hand</td></tr>
