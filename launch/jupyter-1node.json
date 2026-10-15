@@ -8,7 +8,7 @@
   "parameterSet": {
     "schedulerOptions": [
       { "name": "TACC Allocation", "arg": "-A TRA25001" },
-      { "name": "TACC Reservation", "arg": "--reservation=Workshop-Wed" }
+      { "name": "TACC Reservation", "arg": "--reservation=HCSC106" }
     ]
   }
 }

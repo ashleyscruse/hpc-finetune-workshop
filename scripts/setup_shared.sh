@@ -1,7 +1,7 @@
 #!/bin/bash
 # Instructor setup, run once inside a gh compute-node session (not a login node):
 #
-#   idev -p gh -A TRA25001 -r Workshop-Wed -N 1 -t 02:00:00
+#   idev -p gh -A TRA25001 -r HCSC106 -N 1 -t 02:00:00
 #   bash scripts/setup_shared.sh /path/to/shared
 #
 # Builds the shared Python environment, stages the data and model, and opens read
