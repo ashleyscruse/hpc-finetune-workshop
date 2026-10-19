@@ -61,7 +61,26 @@
     .step { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
     .num { font-size: 30px; }
   }
+  .portal { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+  .portal span { color: var(--gold); font: 700 15px/1.2 Arial, Helvetica, sans-serif; letter-spacing: .12em;
+                 text-transform: uppercase; }
+  .portal button { color: #fff; background: transparent; border: 2px solid var(--gold); padding: 8px 16px;
+                   font: 700 16px Arial, Helvetica, sans-serif; cursor: pointer; }
+  .portal button:hover, .portal button[aria-pressed="true"] { background: var(--gold); color: var(--maroon); }
+  html[data-portal="tap"] [data-portal="tapis"], html[data-portal="tapis"] [data-portal="tap"] { display: none; }
 </style>
+<script>
+  (function () {
+    var p = null;
+    try { p = new URLSearchParams(location.search).get('portal'); } catch (e) {}
+    if (p !== 'tap' && p !== 'tapis') {
+      try { p = localStorage.getItem('portal'); } catch (e) { p = null; }
+    }
+    if (p !== 'tap' && p !== 'tapis') p = 'tap';
+    document.documentElement.setAttribute('data-portal', p);
+  })();
+</script>
+<noscript><style>[data-portal="tapis"], .portal { display: none; }</style></noscript>
 </head>
 <body>
 
@@ -75,6 +94,11 @@
       <!-- <a href="#afternoon">Session 2: Make it faster</a> -->
       <a href="#stuck">Stuck?</a>
     </nav>
+    <div class="portal" role="group" aria-label="Portal">
+      <span>Portal:</span>
+      <button type="button" data-set-portal="tap" aria-pressed="false">TAP (tap.tacc.utexas.edu)</button>
+      <button type="button" data-set-portal="tapis" aria-pressed="false">Tapis (morehouse.tapis.io)</button>
+    </div>
   </div>
 </header>
 
@@ -86,6 +110,64 @@
 
 <h2 id="morning">Session 1: Fine-tune a model</h2>
 <p class="lead">Everyone does this on their own. One GPU each.</p>
+
+<div data-portal="tap">
+
+<div class="step"><div class="num">01</div><div>
+  <h3>Log in to TAP</h3>
+  <p>Go to <code>tap.tacc.utexas.edu</code> and click <b>MFA Log In to TAP</b>.</p>
+  <figure><img src="img/tap-01.png" alt="Click MFA Log In to TAP" loading="lazy"><figcaption>Click MFA Log In to TAP</figcaption></figure>
+  <p>Enter your TACC username and password, then click <b>Log In</b>.</p>
+  <figure><img src="img/tap-02.png" alt="Enter your TACC username and password" loading="lazy"><figcaption>Enter your TACC username and password</figcaption></figure>
+  <p>Type the code from your authenticator app and click <b>Verify</b>.</p>
+  <figure><img src="img/tap-03.png" alt="Enter the code from your authenticator app" loading="lazy"><figcaption>Enter the code from your authenticator app</figcaption></figure>
+</div></div>
+
+<div class="step"><div class="num">02</div><div>
+  <h3>Start your GPU session</h3>
+  <p>Fill in <b>Submit New Job</b>:</p>
+  <table class="fields">
+    <tr><th>Setting</th><th>Choose</th></tr>
+    <tr><td>System</td><td><code>Vista</code></td></tr>
+    <tr><td>Application</td><td><code>Jupyter notebook</code></td></tr>
+    <tr><td>Project</td><td><code>TRA25001</code></td></tr>
+    <tr><td>Queue</td><td><code>gh</code> (the GPU queue)</td></tr>
+    <tr><td>Nodes / Tasks</td><td><code>1</code> / <code>1</code></td></tr>
+    <tr><td>Time Limit</td><td><code>2:0:0</code> (two hours)</td></tr>
+    <tr><td>Reservation</td><td>The reservation name for your class. Your instructor gives you this.</td></tr>
+  </table>
+  <p>Then click <b>Submit</b>.</p>
+  <figure><img src="img/tap-04.png" alt="Submit New Job: Vista, Jupyter notebook, TRA25001, gh, and your reservation" loading="lazy"><figcaption>Submit New Job: Vista, Jupyter notebook, TRA25001, gh, and your reservation</figcaption></figure>
+</div></div>
+
+<div class="step"><div class="num">03</div><div>
+  <h3>Open Jupyter</h3>
+  <p>TAP shows your job status. It says <b>PENDING</b> while it waits for a GPU and refreshes on its own. When it is running, click <b>Connect</b>. Jupyter opens in your browser.</p>
+  <figure><img src="img/tap-05.png" alt="TAP Job Status: wait for PENDING to change to running" loading="lazy"><figcaption>TAP Job Status: wait for PENDING to change to running</figcaption></figure>
+</div></div>
+
+<div class="step"><div class="num">04</div><div>
+  <h3>Get the workshop</h3>
+  <p>In Jupyter, open a <b>Terminal</b> from the Launcher and type:</p>
+  <div class="code"><button class="copy">Copy</button><pre><code>cd ~
+git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></div>
+  <p>This puts the workshop in your home folder, so it shows up in Jupyter's file browser on the left.</p>
+</div></div>
+
+<div class="step"><div class="num">05</div><div>
+  <h3>Run it</h3>
+  <p>In the file browser, open <code>hpc-finetune-workshop/notebooks/01-fine-tune.ipynb</code>.</p>
+  <p>Click a cell and press <b>Shift + Enter</b>. Go top to bottom. A cell is done when the <code>[*]</code> beside it turns into a number.</p>
+</div></div>
+
+<div class="step"><div class="num">06</div><div>
+  <h3>When you're done: end your session</h3>
+  <p>Go back to TAP and click <b>End Job</b> so the GPU goes back. Your results are saved.</p>
+</div></div>
+
+</div>
+
+<div data-portal="tapis">
 
 <div class="step"><div class="num">01</div><div>
   <h3>Log in to the supercomputer portal</h3>
@@ -152,6 +234,8 @@ git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></di
   <p>Click a cell and press <b>Shift + Enter</b>. Go top to bottom. A cell is done when the <code>[*]</code> beside it turns into a number.</p>
 </div></div>
 
+</div>
+
 <!-- SESSION 2 (commented out)
 <h2 id="afternoon">Session 2: Make it faster</h2>
 <p class="lead">You work in a team. Pick your roles first.</p>
@@ -206,10 +290,14 @@ END SESSION 2 -->
 <p class="lead">Raise your hand. Most problems are one of these:</p>
 <table>
   <tr><th>What you see</th><th>Likely cause</th></tr>
-  <tr><td>Your job waits and never starts</td><td>A typo in the allocation or reservation, or you still have another job running</td></tr>
-  <tr><td>"multiple projects" error</td><td>The allocation box is empty or unchecked. It should say <code>TRA25001</code></td></tr>
+  <tr data-portal="tap"><td>Your session waits and never starts</td><td>The wrong project or reservation, or you still have another session running</td></tr>
+  <tr data-portal="tap"><td>"multiple projects" error</td><td>The project was not set. It should be <code>TRA25001</code></td></tr>
+  <tr data-portal="tap"><td>Can't log in to TAP</td><td>Check your TACC username and password, and wait for a fresh code from your authenticator app</td></tr>
+  <tr data-portal="tapis"><td>Your job waits and never starts</td><td>A typo in the allocation or reservation, or you still have another job running</td></tr>
+  <tr data-portal="tapis"><td>"multiple projects" error</td><td>The allocation box is empty or unchecked. It should say <code>TRA25001</code></td></tr>
   <tr><td><code>destination path already exists</code></td><td>You already have the workshop folder. Just open it</td></tr>
-  <tr><td>Can't submit, or Browse Files shows nothing</td><td>Your TMS keys aren't set up. Redo step 02</td></tr>
+  <tr data-portal="tap"><td>Can't find the workshop folder in the file browser</td><td>It was cloned somewhere else. Redo step 04, starting with <code>cd ~</code></td></tr>
+  <tr data-portal="tapis"><td>Can't submit, or Browse Files shows nothing</td><td>Your TMS keys aren't set up. Redo step 02</td></tr>
   <tr><td>"Can't see the shared folder"</td><td>Raise your hand</td></tr>
 </table>
 
@@ -231,6 +319,28 @@ END SESSION 2 -->
       } catch (e) {}
     });
   });
+</script>
+<script>
+  (function () {
+    var btns = document.querySelectorAll('[data-set-portal]');
+    function show(p) {
+      document.documentElement.setAttribute('data-portal', p);
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-set-portal') === p ? 'true' : 'false'); });
+    }
+    show(document.documentElement.getAttribute('data-portal') || 'tap');
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var p = b.getAttribute('data-set-portal');
+        show(p);
+        try { localStorage.setItem('portal', p); } catch (e) {}
+        try {
+          var u = new URL(location.href);
+          u.searchParams.set('portal', p);
+          history.replaceState(null, '', u.pathname + u.search + u.hash);
+        } catch (e) {}
+      });
+    });
+  })();
 </script>
 </body>
 </html>

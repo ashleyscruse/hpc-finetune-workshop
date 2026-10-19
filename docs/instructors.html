@@ -130,7 +130,7 @@
 <p>The script below is shared by all three versions. Where a version differs, a labeled box says so.</p>
 
 <h2 id="script">The script</h2>
-<p class="lead">Read top to bottom, in order. Keep two things open: <b>this page</b> and <b>the Tapis portal</b> (morehouse.tapis.io). Paste this link in the chat at the start:</p>
+<p class="lead">Read top to bottom, in order. Keep two things open: <b>this page</b> and <b>the TACC Analysis Portal (TAP)</b> (tap.tacc.utexas.edu). Paste this link in the chat at the start:</p>
 <div class="code"><button class="copy">Copy</button><pre><code>https://ashleyscruse.github.io/hpc-finetune-workshop/</code></pre></div>
 
 <div class="step"><div class="num">&#9654;</div><div>
@@ -161,59 +161,48 @@
   </table>
 </div></div>
 
-<h2 id="setup">Setup in the portal</h2>
-<p class="lead">You click along in the portal while you say each step. Students should have finished logins and MFA as pre-work, so this part should be quick. Without that pre-work, budget 15 to 20 minutes.</p>
+<h2 id="setup">Setup in TAP</h2>
+<p class="lead">You click along in TAP while you say each step. Students should have finished logins and MFA as pre-work, so this part should be quick. Without that pre-work, budget 15 to 20 minutes.</p>
 
 <div class="step"><div class="num">1</div><div>
   <h3>Log in</h3>
   <div class="say"><span class="say-k">SAY</span>
-    <p>Go to morehouse.tapis.io and click <b>Log in with single sign-on</b>. Enter your TACC username and password, click <b>Log In</b>, then type the code from your authenticator app and click <b>Submit</b>.</p>
+    <p>Go to the TACC Analysis Portal, TAP, at tap.tacc.utexas.edu. Click <b>MFA Log In to TAP</b>, log in with your TACC username and password, then type the code from your authenticator app and click <b>Verify</b>.</p>
   </div>
   <p>If someone's code fails: check the phone's clock, wait for a fresh code.</p>
 </div></div>
 
 <div class="step"><div class="num">2</div><div>
-  <h3>Connect to Vista</h3>
+  <h3>Start your GPU session</h3>
   <div class="say"><span class="say-k">SAY</span>
-    <p>Click <b>Systems</b> on the left, then click <b>vista</b>. If it says you're not authenticated, click <b>Authenticate with TMS Keys</b>. You're good when <b>Browse files</b> shows your folders.</p>
+    <p>Start a Jupyter session. For the system, choose <b>Vista</b>. For the application, choose <b>Jupyter notebook</b>.</p>
+    <p>This is the important part. For the project, choose <b>TRA25001</b>. For the queue, choose <b>gh</b>, a GPU queue. For the reservation, type <b>your class's reservation name (from Dr. Scruse)</b>. For the time, give it about <b>2 hours</b>.</p>
+    <p>Then click <b>Submit</b>.</p>
   </div>
+  <div class="heads-up">Biggest risk of the session: a typo in TRA25001 or the reservation name. A session that never starts is almost always this.</div>
 </div></div>
 
 <div class="step"><div class="num">3</div><div>
-  <h3>Start your GPU session</h3>
+  <h3>Open Jupyter</h3>
   <div class="say"><span class="say-k">SAY</span>
-    <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, then <b>submit job</b> at the top right. Click <b>Guided job launcher (v2)</b>.</p>
-    <p><b>Job Basics:</b> don't change anything, click <b>Continue</b>.</p>
-    <p><b>Execution Options:</b> Job Type <b>Batch</b>. Queue: change it from gh-dev to <b>gh</b>. Node Count <b>1</b>. Maximum Minutes <b>120</b>. <b>Continue</b>.</p>
-    <p><b>File Inputs, Arguments, Environment Variables:</b> just click <b>Continue</b> on each.</p>
-    <p><b>Scheduler Options:</b> this is the important one. Check the <b>-A allocation</b> box and type <b>TRA25001</b>. Check the <b>--reservation</b> box and type <b>your class's reservation name (from Dr. Scruse)</b>. <b>Continue</b>.</p>
-    <p><b>Archiving:</b> <b>Continue</b>. <b>Review &amp; Submit:</b> click <b>Submit Job</b>.</p>
+    <p>Wait for your session to be ready. When it is, click <b>Connect</b>. Jupyter opens.</p>
   </div>
-  <div class="heads-up">Biggest risk of the session: a typo in TRA25001 or the reservation name. A job that never starts is almost always this.</div>
 </div></div>
 
 <div class="step"><div class="num">4</div><div>
-  <h3>Open Jupyter</h3>
+  <h3>Get the workshop files</h3>
   <div class="say"><span class="say-k">SAY</span>
-    <p>Click <b>Jobs</b> on the left and click your job. It should say <b>-A TRA25001</b> and <b>rsv</b> followed by our reservation name. Wait for STATUS to change from staging to <b>running</b>, then click the button to open Jupyter.</p>
+    <p>In Jupyter, open a <b>Terminal</b> from the Launcher. Type these two lines, pressing Enter after each:</p>
   </div>
-  <p>No button? Open <code>tapisjob.out</code> in the job's output, copy the address after <code>JUPYTER_URL</code>, open it in a new tab.</p>
+  <div class="code"><button class="copy">Copy</button><pre><code>cd ~
+git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></div>
+  <div class="say"><span class="say-k">SAY</span>
+    <p><code>cd ~</code> means "go to your home folder," which is what Jupyter's file browser shows. <code>git clone</code> means "download a copy of this project from GitHub." Now in the file list on the left, open <b>hpc-finetune-workshop</b>, then <b>notebooks</b>, then <b>01-fine-tune.ipynb</b>.</p>
+  </div>
+  <p>If someone sees <code>destination path already exists</code>: they already have it. Just open it. (For you: if your own copy is old, <code>cd ~/hpc-finetune-workshop</code> then <code>git pull</code>.)</p>
 </div></div>
 
 <div class="step"><div class="num">5</div><div>
-  <h3>Get the workshop files</h3>
-  <div class="say"><span class="say-k">SAY</span>
-    <p>In Jupyter, click <b>File &rarr; New &rarr; Terminal</b>. Type these two lines, pressing Enter after each:</p>
-  </div>
-  <div class="code"><button class="copy">Copy</button><pre><code>cd $WORK
-git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></div>
-  <div class="say"><span class="say-k">SAY</span>
-    <p><code>cd $WORK</code> means "go to your work folder." <code>git clone</code> means "download a copy of this project from GitHub." Now in the file list on the left, open <b>hpc-finetune-workshop</b>, then <b>notebooks</b>, then <b>01-fine-tune.ipynb</b>.</p>
-  </div>
-  <p>If someone sees <code>destination path already exists</code>: they already have it. Just open it. (For you: if your own copy is old, <code>cd $WORK/hpc-finetune-workshop</code> then <code>git pull</code>.)</p>
-</div></div>
-
-<div class="step"><div class="num">6</div><div>
   <h3>How to run a notebook</h3>
   <div class="say"><span class="say-k">SAY</span>
     <p>Click a cell and press <b>Shift + Enter</b>. Go top to bottom. A cell is done when the <code>[*]</code> next to it turns into a number. Don't skip cells.</p>
@@ -489,7 +478,7 @@ EPOCHS         = 1
 <div class="step"><div class="num">&#9654;</div><div>
   <h3>Every version: last thing</h3>
   <div class="say"><span class="say-k">SAY</span>
-    <p>Last thing: go to <b>Jobs</b> in the portal, click your job, and click <b>Cancel</b> so the GPU goes back. Your results are saved.</p>
+    <p>Last thing: go back to TAP and click <b>End Job</b> so the GPU goes back. Your results are saved.</p>
   </div>
 </div></div>
 
@@ -522,7 +511,7 @@ EPOCHS         = 1
 <div class="sub" id="breaks"><h4>If something breaks</h4>
 <table>
   <tr><th>What they see</th><th>What it means</th><th>Fix</th></tr>
-  <tr><td data-label="What they see">The job waits and never starts</td><td data-label="What it means">A typo in the allocation or reservation name</td><td data-label="Fix">Check <code>TRA25001</code> and your class's reservation name, then resubmit</td></tr>
+  <tr><td data-label="What they see">The session waits and never starts</td><td data-label="What it means">A typo in the project or reservation name</td><td data-label="Fix">Check <code>TRA25001</code> and your class's reservation name, then resubmit</td></tr>
   <tr><td data-label="What they see"><code>AssertionError: Can't see the shared folder</code></td><td data-label="What it means">Session can't read <code>SHARED</code></td><td data-label="Fix">Check they're on the allocation and in a compute-node session, not a login node</td></tr>
   <tr><td data-label="What they see"><code>score.weight MISSING</code> in red</td><td data-label="What it means">Normal</td><td data-label="Fix">Nothing. Say "that's the new layer"</td></tr>
   <tr><td data-label="What they see">Cell stuck on <code>[*]</code> a long time</td><td data-label="What it means">Still training, or a big <code>TRAIN_EXAMPLES</code></td><td data-label="Fix">Look for step lines; 60,000 takes about 4.5 min</td></tr>
