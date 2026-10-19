@@ -72,6 +72,21 @@
       font: 700 13px Arial, Helvetica, sans-serif; color: var(--maroon);
       text-transform: uppercase; letter-spacing: .05em; }
   }
+  pre.nocopy { padding-top: 18px; }
+  p code, li code { overflow-wrap: anywhere; }
+  .say { background: #fff; border-left: 6px solid var(--gold); padding: 12px 18px; margin: 12px 0;
+         font-style: italic; }
+  .say p { margin: 6px 0; }
+  .say-k, .ver-k { display: block; font: 700 13px/1.2 Arial, Helvetica, sans-serif; font-style: normal;
+                   letter-spacing: .12em; margin-bottom: 4px; }
+  .say-k { color: var(--gold); }
+  .ver { background: #fff; border: 2px solid var(--maroon); padding: 10px 16px; margin: 12px 0; font-size: 18px; }
+  .ver-k { color: var(--maroon); }
+  .ver p { margin: 4px 0; }
+  .take { border-top: 2px solid var(--gold); padding-top: 10px; margin-top: 16px; font-size: 18px; color: var(--ink2); }
+  .take b { color: var(--maroon); font-family: Arial, Helvetica, sans-serif; }
+  ol.four li { margin: 8px 0; }
+  .step table, .sub table { background: #fff; }
 </style>
 </head>
 <body>
@@ -80,12 +95,12 @@
   <div class="wrap">
     <div class="kicker">INSTRUCTOR GUIDE</div>
     <h1>Fine-Tune It:<br>Instructor Guide</h1>
-    <p>How to run the fine-tuning workshop in your class.</p>
+    <p>What to say at each step, and what is happening underneath.</p>
     <nav>
-      <a href="#before">Before class</a>
-      <a href="#versions">Versions</a>
-      <a href="#assignment">Assignment</a>
-      <a href="#breaks">If something breaks</a>
+      <a href="#script">The script</a>
+      <a href="#steps">Steps</a>
+      <a href="#closing">Closing</a>
+      <a href="#reference">Reference</a>
       <a href="./">Student guide</a>
     </nav>
   </div>
@@ -93,88 +108,432 @@
 
 <main class="wrap">
 
-<p class="lead">Students fine-tune a small open language model (Qwen2.5-0.5B, LoRA) on one Vista GPU to sort real CFPB consumer complaints into six categories. They score it before (about 17%, chance) and after (about 73% in the dry run), then test it on complaints they write.</p>
-<p>Everything runs from <code>notebooks/01-fine-tune.ipynb</code>. Slides are shared separately by Dr. Scruse (Google Slides); one deck per version.</p>
+<p class="lead">This page is for the instructor, not the students. It is a speaker script and primer: what to say, and what is happening underneath, so you can answer the "wait, why?" questions without reading off a script. You do not need to have built the workshop to run it.</p>
+<p>Logistics (pre-work, the reservation, the assignment) are in the instructor guide document you received. The click-by-click student instructions are in the <a href="./">student guide</a>. Every number on this page comes from a dry run of the notebook.</p>
 
-<h2 id="before">Before class</h2>
+<h2 id="four">The whole session in four sentences</h2>
+<ol class="four">
+  <li>We take a model that already <b>reads</b> English (Qwen2.5-0.5B).</li>
+  <li>We bolt on a brand-new <b>"pick one of six" layer</b> that knows nothing, and score it: 17%, pure guessing.</li>
+  <li>We show it 6,000 complaints <b>with the right answers</b> and let it adjust a tiny slice of itself after every batch.</li>
+  <li>We score it again on the <b>same 3,000 complaints it never trained on</b>: 73%. That jump is the lesson.</li>
+</ol>
+<p>Everything else in the notebook is plumbing so those four things can happen on a GPU.</p>
 
-<div class="step"><div class="num">01</div><div>
-  <h3>Reservation</h3>
-  <p>Dr. Scruse submits a Vista reservation for each class date. Students enter allocation <code>TRA25001</code> and that class's reservation name in the portal.</p>
-  <div class="heads-up">The student page and screenshots show reservation <code>HCSC106</code> (from the CSC 106 run). Tell students the reservation name for their class.</div>
-</div></div>
-
-<div class="step"><div class="num">02</div><div>
-  <h3>Shared environment</h3>
-  <p>The notebook points <code>SHARED</code> at:</p>
-  <div class="code"><button class="copy">Copy</button><pre><code>/work/10539/ashleyscruse/vista/inspire-shared</code></pre></div>
-  <p>It holds the data, model, and Python, and it is already built. To rebuild elsewhere, run <code>scripts/setup_shared.sh</code> from a GPU compute-node session (see the README).</p>
-</div></div>
-
-<div class="step"><div class="num">03</div><div>
-  <h3>Student logins</h3>
-  <p>Every student logs in to the portal, finishes MFA, and connects their account to Vista <b>before class</b>.</p>
-  <p><b>Pre-work, graded:</b> a screenshot of their account at <code>accounts.tacc.utexas.edu</code> showing they can log in and that MFA uses an authenticator app (Okta Verify or Google Authenticator). Never SMS.</p>
-  <p>In CSC 106 the first part of class went to logins. With logins done ahead, the notebook fits in 50 minutes.</p>
-</div></div>
-
-<div class="step"><div class="num">04</div><div>
-  <h3>Run-through</h3>
-  <p>Run the notebook once from a student-like account and time Step 3 (training). Training on 6,000 examples took about 27 seconds on one GPU.</p>
-</div></div>
-
-<h2 id="versions">Versions</h2>
-
+<h2 id="versions">Pick your version</h2>
 <table>
-  <tr><th>Version</th><th>Course</th><th>Length</th><th>Deck file</th><th>Notebook steps</th></tr>
-  <tr><td data-label="Version"><b>Intro CS</b></td><td data-label="Course">CSC 106</td><td data-label="Length">75 min</td><td data-label="Deck file"><code>intro-cs-fine-tune.pptx</code></td><td data-label="Notebook steps">0 to 5</td></tr>
-  <tr><td data-label="Version"><b>Ethics</b></td><td data-label="Course">Computer Ethics</td><td data-label="Length">50 min</td><td data-label="Deck file"><code>ethics-fine-tune.pptx</code></td><td data-label="Notebook steps">0 to 5 (skip 6)</td></tr>
-  <tr><td data-label="Version"><b>SWE</b></td><td data-label="Course">Software Engineering and Advanced Software Engineering</td><td data-label="Length">About 2.5 hours</td><td data-label="Deck file"><code>swe-fine-tune.pptx</code></td><td data-label="Notebook steps">0 to 6</td></tr>
+  <tr><th>Version</th><th>Length</th><th>Notebook steps</th></tr>
+  <tr><td data-label="Version"><b>Intro CS</b> (CSC 106)</td><td data-label="Length">75 min</td><td data-label="Notebook steps">0 to 5</td></tr>
+  <tr><td data-label="Version"><b>Computer Ethics</b></td><td data-label="Length">50 min</td><td data-label="Notebook steps">0 to 5. Step 5 = break the model</td></tr>
+  <tr><td data-label="Version"><b>Software Engineering</b> and Advanced Software Engineering</td><td data-label="Length">About 2.5 hours</td><td data-label="Notebook steps">0 to 6</td></tr>
 </table>
+<p>The script below is shared by all three versions. Where a version differs, a labeled box says so.</p>
 
-<div class="step"><div class="num">A</div><div>
-  <h3>Intro CS (CSC 106)</h3>
-  <p><b>75 minutes.</b> Deck: <code>intro-cs-fine-tune.pptx</code></p>
-  <p><b>Focus:</b> how supercomputers train AI and what fine-tuning is.</p>
-  <p><b>Run:</b> Steps 0 to 5.</p>
-  <p><b>Close:</b> what changed between before and after.</p>
+<h2 id="script">The script</h2>
+<p class="lead">Read top to bottom, in order. Keep two things open: <b>this page</b> and <b>the Tapis portal</b> (morehouse.tapis.io). Paste this link in the chat at the start:</p>
+<div class="code"><button class="copy">Copy</button><pre><code>https://ashleyscruse.github.io/hpc-finetune-workshop/</code></pre></div>
+
+<div class="step"><div class="num">&#9654;</div><div>
+  <h3>Opening (2 min)</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Today you're going to take an AI model that has never done this job, teach it a new job in about 30 seconds, and prove it learned. Every year people send millions of complaints about banks and payment apps to the government, and someone has to sort each one into the right team. Our model starts out guessing. By the end it'll get about 3 out of 4 right. You'll do it on a supercomputer GPU.</p>
+    <p>I'm putting a link in the chat. Open it. It has every click with pictures. We'll do it together.</p>
+  </div>
+  <div class="ver"><span class="ver-k">COMPUTER ETHICS</span>
+    <p>Frame it this way: "Today we fine-tune a real language model on a supercomputer, and at every step we ask an ethics question: whose data, whose mistakes, whose responsibility."</p>
+  </div>
+  <div class="ver"><span class="ver-k">SOFTWARE ENGINEERING</span>
+    <p>Frame it this way: "Today we fine-tune a real language model on a supercomputer, then talk about how a model like this becomes part of the software you build."</p>
+  </div>
 </div></div>
 
-<div class="step"><div class="num">B</div><div>
+<div class="step"><div class="num">&#9654;</div><div>
+  <h3>Seven words to go over before setup (3 min)</h3>
+  <table>
+    <tr><th>Word</th><th>Plain meaning</th><th>Where it shows up</th></tr>
+    <tr><td data-label="Word"><b>Weights</b></td><td data-label="Plain meaning">The numbers inside the model. "Learning" = changing them.</td><td data-label="Where it shows up">"trainable weights: 2,168,064 of 496,206,208"</td></tr>
+    <tr><td data-label="Word"><b>Token</b></td><td data-label="Plain meaning">A word piece. "Refinance" might be 2 or 3 tokens.</td><td data-label="Where it shows up"><code>MAX_LEN = 256</code> tokens per complaint</td></tr>
+    <tr><td data-label="Word"><b>Batch</b></td><td data-label="Plain meaning">A handful of complaints processed together. Ours is 32.</td><td data-label="Where it shows up">"32 per GPU"</td></tr>
+    <tr><td data-label="Word"><b>Step</b></td><td data-label="Plain meaning">One batch in, one small adjustment out.</td><td data-label="Where it shows up">"step 25/187"</td></tr>
+    <tr><td data-label="Word"><b>Epoch</b></td><td data-label="Plain meaning">One full pass through all the training complaints.</td><td data-label="Where it shows up"><code>EPOCHS = 1</code></td></tr>
+    <tr><td data-label="Word"><b>Loss</b></td><td data-label="Plain meaning">How wrong the model was on that batch. Lower is better.</td><td data-label="Where it shows up">"loss 0.531"</td></tr>
+    <tr><td data-label="Word"><b>LoRA</b></td><td data-label="Plain meaning">Freeze the big model, learn a small add-on instead.</td><td data-label="Where it shows up">"0.44%" trainable</td></tr>
+  </table>
+</div></div>
+
+<h2 id="setup">Setup in the portal</h2>
+<p class="lead">You click along in the portal while you say each step. Students should have finished logins and MFA as pre-work, so this part should be quick. Without that pre-work, budget 15 to 20 minutes.</p>
+
+<div class="step"><div class="num">1</div><div>
+  <h3>Log in</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Go to morehouse.tapis.io and click <b>Log in with single sign-on</b>. Enter your TACC username and password, click <b>Log In</b>, then type the code from your authenticator app and click <b>Submit</b>.</p>
+  </div>
+  <p>If someone's code fails: check the phone's clock, wait for a fresh code.</p>
+</div></div>
+
+<div class="step"><div class="num">2</div><div>
+  <h3>Connect to Vista</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Click <b>Systems</b> on the left, then click <b>vista</b>. If it says you're not authenticated, click <b>Authenticate with TMS Keys</b>. You're good when <b>Browse files</b> shows your folders.</p>
+  </div>
+</div></div>
+
+<div class="step"><div class="num">3</div><div>
+  <h3>Start your GPU session</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Click <b>Apps</b>, click <b>jupyter-hpc-native</b>, then <b>submit job</b> at the top right. Click <b>Guided job launcher (v2)</b>.</p>
+    <p><b>Job Basics:</b> don't change anything, click <b>Continue</b>.</p>
+    <p><b>Execution Options:</b> Job Type <b>Batch</b>. Queue: change it from gh-dev to <b>gh</b>. Node Count <b>1</b>. Maximum Minutes <b>120</b>. <b>Continue</b>.</p>
+    <p><b>File Inputs, Arguments, Environment Variables:</b> just click <b>Continue</b> on each.</p>
+    <p><b>Scheduler Options:</b> this is the important one. Check the <b>-A allocation</b> box and type <b>TRA25001</b>. Check the <b>--reservation</b> box and type <b>your class's reservation name (from Dr. Scruse)</b>. <b>Continue</b>.</p>
+    <p><b>Archiving:</b> <b>Continue</b>. <b>Review &amp; Submit:</b> click <b>Submit Job</b>.</p>
+  </div>
+  <div class="heads-up">Biggest risk of the session: a typo in TRA25001 or the reservation name. A job that never starts is almost always this.</div>
+</div></div>
+
+<div class="step"><div class="num">4</div><div>
+  <h3>Open Jupyter</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Click <b>Jobs</b> on the left and click your job. It should say <b>-A TRA25001</b> and <b>rsv</b> followed by our reservation name. Wait for STATUS to change from staging to <b>running</b>, then click the button to open Jupyter.</p>
+  </div>
+  <p>No button? Open <code>tapisjob.out</code> in the job's output, copy the address after <code>JUPYTER_URL</code>, open it in a new tab.</p>
+</div></div>
+
+<div class="step"><div class="num">5</div><div>
+  <h3>Get the workshop files</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>In Jupyter, click <b>File &rarr; New &rarr; Terminal</b>. Type these two lines, pressing Enter after each:</p>
+  </div>
+  <div class="code"><button class="copy">Copy</button><pre><code>cd $WORK
+git clone https://github.com/ashleyscruse/hpc-finetune-workshop</code></pre></div>
+  <div class="say"><span class="say-k">SAY</span>
+    <p><code>cd $WORK</code> means "go to your work folder." <code>git clone</code> means "download a copy of this project from GitHub." Now in the file list on the left, open <b>hpc-finetune-workshop</b>, then <b>notebooks</b>, then <b>01-fine-tune.ipynb</b>.</p>
+  </div>
+  <p>If someone sees <code>destination path already exists</code>: they already have it. Just open it. (For you: if your own copy is old, <code>cd $WORK/hpc-finetune-workshop</code> then <code>git pull</code>.)</p>
+</div></div>
+
+<div class="step"><div class="num">6</div><div>
+  <h3>How to run a notebook</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Click a cell and press <b>Shift + Enter</b>. Go top to bottom. A cell is done when the <code>[*]</code> next to it turns into a number. Don't skip cells.</p>
+  </div>
+</div></div>
+
+<h2 id="steps">The notebook (about 35 min)</h2>
+<p class="lead">For each step: read the notebook's own text out loud, run the cell, then read the <b>SAY</b> box. The rest of each step is backup for questions.</p>
+
+<!-- STEP 0 -->
+<div class="step"><div class="num">0</div><div>
+  <h3>Check you're on a GPU</h3>
+  <div class="code"><pre class="nocopy"><code>SHARED = "/work/10539/ashleyscruse/vista/inspire-shared"   # shared data, model, and Python
+PY     = f"{SHARED}/venv/bin/python"                       # the workshop's Python
+REPO   = str(pathlib.Path.cwd().parent)                    # this repository
+RUNS   = f"{os.environ['SCRATCH']}/inspire"                # where your results go</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"That's one GPU with about 96 gigabytes of memory. A laptop has 4 to 8. That's why we're here."</p>
+  </div>
+  <div class="sub"><h4>Underneath</h4>
+  <table>
+    <tr><th>Line</th><th>What it does</th><th>Why</th></tr>
+    <tr><td data-label="Line"><code>SHARED</code></td><td data-label="What it does">Points at the shared folder built with <code>setup_shared.sh</code>: data, model, Python environment.</td><td data-label="Why">Everyone reads one copy instead of 30 people downloading a model.</td></tr>
+    <tr><td data-label="Line"><code>PY</code></td><td data-label="What it does">The Python that has PyTorch, Transformers, and PEFT installed. <code>f"..."</code> is an f-string: <code>{SHARED}</code> gets filled in.</td><td data-label="Why">The Jupyter kernel's own Python doesn't have those libraries. Every script is run with <i>this</i> Python.</td></tr>
+    <tr><td data-label="Line"><code>REPO</code></td><td data-label="What it does"><code>cwd()</code> is the <code>notebooks/</code> folder; <code>.parent</code> is one level up, the repo root.</td><td data-label="Why">So the notebook can find <code>scripts/</code>.</td></tr>
+    <tr><td data-label="Line"><code>RUNS</code></td><td data-label="What it does"><code>$SCRATCH/inspire</code>, each student's own scratch space.</td><td data-label="Why">Results are personal and fast to write; nobody overwrites anyone else.</td></tr>
+    <tr><td data-label="Line"><code>os.environ.update(...)</code></td><td data-label="What it does">Puts <code>SHARED</code> and <code>PY</code> into the environment.</td><td data-label="Why">Scripts launched from the notebook can see them.</td></tr>
+    <tr><td data-label="Line"><code>LD_LIBRARY_PATH</code> line</td><td data-label="What it does">Tells the system where to find the Python library file.</td><td data-label="Why">Without it the shared Python fails to start. Students never need to touch it.</td></tr>
+    <tr><td data-label="Line"><code>assert ...</code></td><td data-label="What it does">Stops with "Raise your hand" if the shared Python isn't visible.</td><td data-label="Why">Catches a bad session up front, not 20 minutes later.</td></tr>
+    <tr><td data-label="Line"><code>!nvidia-smi --query-gpu=...</code></td><td data-label="What it does">Asks the GPU for its name and memory.</td><td data-label="Why">Proof they're on a GPU node.</td></tr>
+  </table>
+  <p><b>Expected output:</b> <code>NVIDIA GH200 120GB, 97871 MiB</code>. The "120GB" is the chip's name; 97,871 MiB (about 96 GB) is the GPU memory they can use. That's the "96 GB vs a laptop's 4 to 8" line.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Points the notebook at the shared workshop tools and asks the computer what GPU it has.<br><b>Why it matters for their projects:</b> Before you run anything big, check you're on the machine you think you're on. If a project ever needs a GPU, this one line is how you prove you have one.</div>
+</div></div>
+
+<!-- STEP 1 -->
+<div class="step"><div class="num">1</div><div>
+  <h3>Meet the data</h3>
+  <div class="code"><pre class="nocopy"><code>!{PY} {REPO}/scripts/peek.py --shared {SHARED} --n 3</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"Real complaints. The XXXX is personal info the government blacked out. Which two categories do you think the model will mix up?"</p>
+  </div>
+  <p>(The answer comes in Step 4: credit reporting and debt collection.)</p>
+  <div class="sub"><h4>About the dataset (if anyone asks, or say it before running)</h4>
+  <ul>
+    <li><b>What it is:</b> real complaints people filed with the <b>Consumer Financial Protection Bureau (CFPB)</b>, the federal agency that handles complaints about banks, lenders, credit bureaus, and payment apps. The full database has about <b>10 million</b> complaints.</li>
+    <li><b>Who can use it:</b> it's public. Anyone can download it.</li>
+    <li><b>What's in each one:</b> the complaint written in the person's own words, plus which product it was about. Names, account numbers, and dates are blacked out as <code>XXXX</code>.</li>
+    <li><b>Where ours came from:</b> the CFPB stopped including the written text in its bulk download, so we used an earlier public copy on Hugging Face (about 1.7 million complaints with text, 2015 to 2024).</li>
+    <li><b>What we kept:</b> an even sample. <b>20,000 per category for training</b> (120,000 total) and a separate <b>500 per category for testing</b> (3,000 total). Equal counts mean the model can't look smart by always guessing the biggest category.</li>
+  </ul>
+  <table>
+    <tr><th>Category</th><th>What kind of complaint</th></tr>
+    <tr><td data-label="Category"><b>Credit reporting</b></td><td data-label="What kind of complaint">Errors on a credit report, credit repair companies</td></tr>
+    <tr><td data-label="Category"><b>Debt collection</b></td><td data-label="What kind of complaint">Collectors calling, debts you don't owe or already paid</td></tr>
+    <tr><td data-label="Category"><b>Mortgage</b></td><td data-label="What kind of complaint">Home loans: payments, escrow, refinancing, foreclosure</td></tr>
+    <tr><td data-label="Category"><b>Credit card</b></td><td data-label="What kind of complaint">Charges, fees, disputes, card account problems</td></tr>
+    <tr><td data-label="Category"><b>Bank account</b></td><td data-label="What kind of complaint">Checking and savings accounts</td></tr>
+    <tr><td data-label="Category"><b>Money transfer &amp; payments</b></td><td data-label="What kind of complaint">Payment apps, wire transfers, prepaid cards, crypto</td></tr>
+  </table>
+  <p><code>peek.py</code> opens <code>train.parquet</code> (a compressed table file, like a fast CSV), counts complaints per category, and prints 3 random ones (<code>--n 3</code>). Run it again, get 3 different ones.</p>
+  <p><b>Expected:</b> 120,000 complaints, exactly 20,000 per category. <b>Why equal?</b> If one category were 50% of the data, a model could score 50% by always saying that category and look smart while learning nothing. Equal counts make 17% the honest "knows nothing" line.</p>
+  <p><code>XXXX</code> and <code>{$2900.00}</code> are CFPB's redactions and formatting, not our bug.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Opens the dataset, counts complaints per category, and shows a few real ones.<br><b>Why it matters for their projects:</b> Always look at your data before you build anything. Read 20 rows. Check whether one category swamps the others. Most project problems are data problems you could have spotted here.</div>
+</div></div>
+
+<!-- STEP 2 -->
+<div class="step"><div class="num">2</div><div>
+  <h3>Score the model before training</h3>
+  <div class="code"><pre class="nocopy"><code>!{PY} {REPO}/scripts/train.py --shared {SHARED} --out {RUNS}/before --epochs 0</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"17%. With six choices, that's pure guessing. The red MISSING warning is normal: it's the brand-new answer layer that hasn't learned anything yet."</p>
+  </div>
+  <div class="sub"><h4>Underneath</h4>
+  <p>Same script as training, but <code>--epochs 0</code> means "zero passes: skip training, just take the test." Results go to <code>$SCRATCH/inspire/before/results.json</code>.</p>
+  <p>What <code>train.py</code> does here, in order:</p>
+  <ol>
+    <li><b>Loads Qwen2.5-0.5B</b> from the shared folder (no internet needed).</li>
+    <li><b>Adds a new final layer</b> called <code>score</code> with six outputs, one per category. It starts as random numbers.</li>
+    <li><b>Wraps it in LoRA</b> (more on this in Step 3).</li>
+    <li><b>Takes the test:</b> 3,000 complaints, 500 per category, that are never used for training.</li>
+  </ol>
+  <p><b>The red <code>score.weight | MISSING</code> warning</b> is that new layer. The library is saying "this part didn't come with the download, so I made it up randomly." True, and expected. That's the whole point of the "before" score.</p>
+  <p><b>Expected:</b> <code>accuracy on 3,000 complaints it never saw: 17.0%</code></p>
+  <p><b>Why exactly 17%, and why was debt collection 96%?</b> A random layer usually leans toward one answer. This one said "debt collection" for almost everything. So it got 96% of the 500 debt collection complaints right and almost nothing else: about 480 + 10 + 15 + 5 right out of 3,000 &asymp; 510 &asymp; 17%.</p>
+  <p>It's like a student who answers "C" on every multiple-choice question: perfect on the C questions, 1 in 6 overall.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Gives the model the test with zero training, to get a starting score.<br><b>Why it matters for their projects:</b> Measure the "before." Without a starting number, you can't prove anything you build actually helped. That's true for an AI model, a tutoring program, or a website change.</div>
+</div></div>
+
+<!-- STEP 3 -->
+<div class="step"><div class="num">3</div><div>
+  <h3>Fine-tune it</h3>
+  <div class="code"><pre class="nocopy"><code>TRAIN_EXAMPLES = 6000     # how many labeled complaints to learn from
+
+!{PY} {REPO}/scripts/train.py --shared {SHARED} --out {RUNS}/run1 --limit {TRAIN_EXAMPLES} --save-adapter</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"It's reading 32 complaints at a time, checking the answers, and adjusting. Watch the loss: that's how wrong it is, and it should go down. We're using LoRA: we freeze the model and only train a small add-on, less than half a percent of it. Like sticky notes in a textbook instead of rewriting the book."</p>
+  </div>
+  <div class="sub"><h4>Underneath</h4>
+  <table>
+    <tr><th>Flag</th><th>Meaning</th></tr>
+    <tr><td data-label="Flag"><code>--out {RUNS}/run1</code></td><td data-label="Meaning">Save this run's results in a folder named <code>run1</code></td></tr>
+    <tr><td data-label="Flag"><code>--limit 6000</code></td><td data-label="Meaning">Use the first 6,000 training complaints (of 120,000)</td></tr>
+    <tr><td data-label="Flag"><code>--save-adapter</code></td><td data-label="Meaning">Also save the learned LoRA weights, so Step 5 can use the trained model</td></tr>
+    <tr><td data-label="Flag">(not passed)</td><td data-label="Meaning">Defaults: 1 epoch, batch 32, 256 tokens, learning rate 0.0002</td></tr>
+  </table>
+  <p><b>What happens on every step</b> (the loop in <code>train.py</code>):</p>
+  <ol>
+    <li>Grab 32 complaints and their correct categories.</li>
+    <li><b>Tokenize</b>: chop each into word pieces, cut at 256, pad short ones so all 32 are the same length (GPUs need even rectangles).</li>
+    <li><b>Forward</b>: the model guesses a category for each.</li>
+    <li><b>Loss</b>: compare guesses to the right answers; one number for "how wrong."</li>
+    <li><b>Backward</b>: work out which direction to nudge each trainable weight to be less wrong.</li>
+    <li><b>Optimizer step</b> (<code>AdamW</code>): nudge them a little.</li>
+    <li>Repeat.</li>
+  </ol>
+  <p>6,000 &divide; 32 = 187.5, so <b>187 steps</b> (the leftover half batch is dropped).</p>
+  <p><b>LoRA, the one-minute version.</b> The model has 496 million weights. Updating all of them needs a lot of memory and time. LoRA <b>freezes all of them</b> and adds small "correction" matrices to the attention layers (where the model decides which words matter), plus the new <code>score</code> layer. Only those learn: "trainable weights: 2,168,064 of 496,206,208 (0.44%)".</p>
+  <p>Analogy that works with students: you don't rewrite a textbook to teach one class; you add sticky notes. LoRA is the sticky notes. <code>--save-adapter</code> saves just the sticky notes (a few MB), not a whole new textbook.</p>
+  <p><b>Reading the loss.</b> From the dry run:</p>
+  <div class="code"><pre class="nocopy"><code>step    25/187   loss 2.883
+step    50/187   loss 1.521
+step   100/187   loss 0.778
+step   175/187   loss 0.315
+step   187/187   loss 0.902</code></pre></div>
+  <ul>
+    <li>It <b>starts above 1.8</b> because the random layer is confidently wrong. Plain guessing among six would be about 1.8; 2.9 means worse than guessing, confidently.</li>
+    <li>It <b>drops fast</b>: that's learning.</li>
+    <li>It <b>bounces</b> (0.315 then 0.902). Each printed loss is <b>one batch of 32</b>, and some batches are just harder. Watch the trend, not each number. If a student panics about the last line, this is why.</li>
+  </ul>
+  <p><b>Expected:</b> <code>training took 27.3s (219 complaints per second)</code> and <code>72.9%</code>.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Shows the model 6,000 complaints with the right answers and lets it adjust a small add-on after every batch of 32.<br><b>Why it matters for their projects:</b> You don't have to build AI from scratch. Take a model that already reads, add your own labeled examples, and teach it one job. Any sorting problem works the same way: emails, survey answers, support tickets, research abstracts. If you have text and labels, you have a project.</div>
+</div></div>
+
+<!-- STEP 4 -->
+<div class="step"><div class="num">4</div><div>
+  <h3>Score it again</h3>
+  <div class="code"><pre class="nocopy"><code>before = json.loads(pathlib.Path(f"{RUNS}/before/results.json").read_text())
+after  = json.loads(pathlib.Path(f"{RUNS}/run1/results.json").read_text())</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"17% to about 73% in under 30 seconds, on complaints it never saw. Mortgage is easiest because nobody else says escrow or foreclosure. Credit reporting is hardest because a debt in collections shows up on your credit report. That's the pair you guessed."</p>
+  </div>
+  <div class="sub"><h4>Underneath</h4>
+  <p>This cell does no AI. It <b>reads the two report cards</b> the script saved (<code>results.json</code> files) and prints them side by side.</p>
+  <p>The print lines use f-string formatting: <code>{x:8.0%}</code> means "show x as a percent, no decimals, 8 characters wide," which is what makes the columns line up. Students don't need to know this; it's here if someone asks.</p>
+  <table>
+    <tr><th>Category</th><th>Before</th><th>After</th><th>Why</th></tr>
+    <tr><td data-label="Category"><b>All</b></td><td data-label="Before">17%</td><td data-label="After"><b>73%</b></td><td data-label="Why"></td></tr>
+    <tr><td data-label="Category">Mortgage</td><td data-label="Before">0%</td><td data-label="After">95%</td><td data-label="Why">Words nothing else uses: escrow, refinance, foreclosure</td></tr>
+    <tr><td data-label="Category">Debt collection</td><td data-label="Before">96%</td><td data-label="After">88%</td><td data-label="Why">Went <i>down</i> because it stopped saying "debt collection" for everything</td></tr>
+    <tr><td data-label="Category">Money transfer</td><td data-label="Before">0%</td><td data-label="After">77%</td><td data-label="Why"></td></tr>
+    <tr><td data-label="Category">Credit card</td><td data-label="Before">1%</td><td data-label="After">72%</td><td data-label="Why"></td></tr>
+    <tr><td data-label="Category">Bank account</td><td data-label="Before">3%</td><td data-label="After">69%</td><td data-label="Why"></td></tr>
+    <tr><td data-label="Category">Credit reporting</td><td data-label="Before">2%</td><td data-label="After">36%</td><td data-label="Why">Hardest: a debt in collections shows up on your credit report, so those complaints sound alike</td></tr>
+  </table>
+  <p><b>What "per category" means:</b> of the 500 test complaints that really were mortgage, what share did the model call mortgage. It's per row, so the rows don't add up to the total.</p>
+  <p><b>If someone asks "is 73% good?"</b> Better than 4x guessing, in 27 seconds, on 5% of the data. Step 6 is how they find out if it can get better.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Reads the saved before and after report cards and lines them up side by side.<br><b>Why it matters for their projects:</b> Test on examples the model never trained on, or the score is meaningless. Look at each category, not just the total. The weakest category tells you where your data is genuinely confusing.</div>
+</div></div>
+
+<!-- STEP 5 -->
+<div class="step"><div class="num">5</div><div>
+  <h3>Try it on your own complaint</h3>
+  <div class="code"><pre class="nocopy"><code>MY_COMPLAINTS = [ "...", "...", "Write your own here." ]
+
+cmd = [PY, f"{REPO}/scripts/predict.py", "--shared", SHARED, "--adapter", f"{RUNS}/run1/adapter"]
+for c in MY_COMPLAINTS:
+    cmd += ["--text", c]
+print(subprocess.run(cmd, capture_output=True, text=True).stdout)</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"Change the text in quotes and run it. The percentages are how sure it is. Try to trick it with one that fits two categories. Notice it always picks one of six, even for nonsense, because that's all it was taught."</p>
+  </div>
+  <div class="ver"><span class="ver-k">COMPUTER ETHICS</span>
+    <p>Make this the main event: have students try to break the model. Vague complaints, two problems at once, slang. Then tie it back to who gets misclassified: accuracy hides who the errors land on. A model can score well overall and still fail one group of writers most of the time. Ask the room: "If it is right 7 times out of 10, who are the other 3?"</p>
+  </div>
+  <div class="sub"><h4>Underneath</h4>
+  <table>
+    <tr><th>Piece</th><th>Meaning</th></tr>
+    <tr><td data-label="Piece"><code>MY_COMPLAINTS = [...]</code></td><td data-label="Meaning">A Python list. Students edit the text inside the quotes. Each item needs quotes and a comma.</td></tr>
+    <tr><td data-label="Piece"><code>cmd = [...]</code></td><td data-label="Meaning">Builds the terminal command as a list of pieces.</td></tr>
+    <tr><td data-label="Piece"><code>for c in ...: cmd += ["--text", c]</code></td><td data-label="Meaning">Adds <code>--text "complaint"</code> once per complaint.</td></tr>
+    <tr><td data-label="Piece"><code>subprocess.run(...)</code></td><td data-label="Meaning">Runs the command and prints what it says.</td></tr>
+  </table>
+  <p><b>Why not <code>!</code> like the other cells?</b> Complaints contain spaces, apostrophes, and <code>$</code>. Pasted into a <code>!</code> line, the shell would mangle them. The list form hands each complaint over untouched.</p>
+  <p><code>predict.py</code> loads the base model, <b>plugs in the <code>run1</code> sticky notes</b>, and reports the top 3 guesses with confidence.</p>
+  <p><b>Where the percentages come from:</b> the model outputs six raw scores, and a function called <b>softmax</b> turns them into six percentages that add to 100%.</p>
+  <p><b>Expected:</b></p>
+  <div class="code"><pre class="nocopy"><code>I sent $200 to my brother through a payment app...
+   Money transfer &amp; payments     41.0%
+   Credit card                   40.3%
+
+A collector keeps calling my job about a medical bill I already paid.
+   Debt collection               96.1%
+
+Write your own here.
+   Credit card                   46.8%</code></pre></div>
+  <ul>
+    <li><b>41 vs 40:</b> a near tie. Payment apps are often linked to cards, so the language overlaps.</li>
+    <li><b>"Write your own here." still gets an answer.</b> The model <i>must</i> pick one of six. It was never given a "this isn't a complaint" option. Good teaching moment: a model only knows the choices you gave it.</li>
+  </ul>
+  <p><b>Common student error:</b> a missing comma or quote in the list gives <code>SyntaxError</code>. Point at the line it names.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Loads the trained model and asks it about brand-new complaints you type in.<br><b>Why it matters for their projects:</b> This is what using a trained model looks like. It also shows the limits: it only knows the six choices it was given, and it will answer even when it shouldn't. Before you trust any model in a project, try to trick it.</div>
+</div></div>
+
+<!-- STEP 6 -->
+<div class="step"><div class="num">6</div><div>
+  <h3>Your experiment</h3>
+  <div class="ver"><span class="ver-k">COMPUTER ETHICS</span>
+    <p>Skip Step 6. Go straight to the closing.</p>
+  </div>
+  <div class="ver"><span class="ver-k">SOFTWARE ENGINEERING</span>
+    <p>Run it as an A/B test: each student changes one setting (more data, shorter input, or more passes) and compares results. Compare results across the room at the close if there's time.</p>
+  </div>
+  <div class="code"><pre class="nocopy"><code>RUN_NAME       = "exp1"
+TRAIN_EXAMPLES = 24000
+MAX_LEN        = 256
+EPOCHS         = 1
+
+!{PY} {REPO}/scripts/train.py --shared {SHARED} --out {RUNS}/{RUN_NAME} --limit {TRAIN_EXAMPLES} --max-len {MAX_LEN} --epochs {EPOCHS}</code></pre></div>
+  <div class="say"><span class="say-k">SAY AFTER IT RUNS</span>
+    <p>"Change one number, give it a new RUN_NAME, run it. More data, shorter reading, or more passes. One change at a time so you know what caused the difference."</p>
+  </div>
+  <div class="sub"><h4>Underneath</h4>
+  <p>Same training script, but now all four knobs are visible. <b>Change one, keep the others, new <code>RUN_NAME</code> each time.</b> Reusing a name overwrites that run's results.</p>
+  <table>
+    <tr><th>Knob</th><th>What it controls</th><th>What to expect</th></tr>
+    <tr><td data-label="Knob"><code>TRAIN_EXAMPLES</code></td><td data-label="What it controls">How many complaints to learn from</td><td data-label="What to expect">Dry run: 6,000 &rarr; 73% / 27s; 24,000 &rarr; <b>82% / 110s</b>; 60,000 &rarr; 83% / 264s</td></tr>
+    <tr><td data-label="Knob"><code>MAX_LEN</code></td><td data-label="What it controls">How many tokens of each complaint it reads</td><td data-label="What to expect">64 = only the opening; 512 = most of it, slower. Not tested in the dry run</td></tr>
+    <tr><td data-label="Knob"><code>EPOCHS</code></td><td data-label="What it controls">How many times it sees each complaint</td><td data-label="What to expect">2 = twice as long. Not tested in the dry run</td></tr>
+  </table>
+  <p><b>The pattern to land:</b> time grows in a straight line with data (4x data &asymp; 4x time), but accuracy gains shrink (+9 points, then +1). More data helps, and each extra point costs more. If more data is better but slow, the next move is more GPUs.</p>
+  <p><b>Why one change at a time:</b> if they change data <i>and</i> epochs and it improves, they can't say which one did it. That's the "controlled experiment" bullet at the end of the notebook.</p>
+  <p>Note: this cell has no <code>--save-adapter</code>, so Step 5 still uses <code>run1</code>. To test a bigger model on their own complaints, add <code>--save-adapter</code> here and change <code>run1</code> to their <code>RUN_NAME</code> in Step 5.</p>
+  </div>
+  <div class="take"><b>What the code does:</b> Runs the same training again with one setting changed, so you can see what that setting does.<br><b>Why it matters for their projects:</b> Change one thing at a time, or you won't know what caused the difference. More data helped, but each extra point cost more time. Deciding how much accuracy is worth how much time is a real decision in every project.</div>
+</div></div>
+
+<h2 id="closing">Closing (3 to 5 min)</h2>
+
+<div class="step"><div class="num">&#9654;</div><div>
+  <h3>Intro CS</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Here's what you just did: you ran an AI model on a supercomputer, measured it before, taught it a new job, and measured it after. That's the whole recipe, and it works for any text you can label: emails, survey answers, research abstracts. If you have text and the right answers, you have a project.</p>
+  </div>
+</div></div>
+
+<div class="step"><div class="num">&#9654;</div><div>
   <h3>Computer Ethics</h3>
-  <p><b>50 minutes.</b> Deck: <code>ethics-fine-tune.pptx</code></p>
-  <p><b>Focus:</b> the ethics of fine-tuning: where the data came from and consent, who gets misclassified, who is accountable.</p>
-  <p><b>Run:</b> Steps 0 to 5. Skip Step 6. In Step 5, students try to break the model: vague complaints, two problems at once, slang.</p>
-  <p><b>Close:</b> three discussion questions.</p>
-  <ul><li>What broke it?</li><li>Who should check?</li><li>Would you deploy it?</li></ul>
+  <p>Close with whichever question the room is most into. Five minutes is enough.</p>
+  <ul>
+    <li><b>What broke it?</b> Which complaints fooled the model? What do they have in common?</li>
+    <li><b>Who should check?</b> Where in this process should a human review the model's work?</li>
+    <li><b>Would you deploy it?</b> At the accuracy you saw today, would you let it sort real complaints? What would change your mind?</li>
+  </ul>
 </div></div>
 
-<div class="step"><div class="num">C</div><div>
-  <h3>Software Engineering and Advanced Software Engineering</h3>
-  <p><b>About 2.5 hours.</b> Deck: <code>swe-fine-tune.pptx</code></p>
-  <p><b>Focus:</b> how fine-tuned models benefit software: where a model fits in an app, a fine-tuned small model vs a big chat API, and shipping it (tests, versioning the adapter, drift).</p>
-  <p><b>Run:</b> Steps 0 to 6. In Step 6 each student changes one setting (more data, shorter input, or more passes) and compares results like an A/B test.</p>
-  <p><b>Close:</b></p>
-  <ul><li>What would you build?</li><li>What did your experiment show?</li><li>When would you skip it?</li></ul>
+<div class="step"><div class="num">&#9654;</div><div>
+  <h3>Software Engineering</h3>
+  <p>Close with whichever question the room is most into. Compare Step 6 results across the room if there's time.</p>
+  <ul>
+    <li><b>What would you build?</b> Where would a fine-tuned model fit in something you have built?</li>
+    <li><b>What did your experiment show?</b> Which setting changed the score most? Was the extra training time worth it?</li>
+    <li><b>When would you skip it?</b> What tasks are better left to rules, a big chat model, or a person?</li>
+  </ul>
 </div></div>
 
-<div class="note"><b>NOTE</b>&nbsp; Session 2 (<code>notebooks/02-make-it-faster.ipynb</code>, multi-node scaling) needs 4 GPU nodes per team and is not part of these class versions.</div>
+<div class="step"><div class="num">&#9654;</div><div>
+  <h3>Every version: last thing</h3>
+  <div class="say"><span class="say-k">SAY</span>
+    <p>Last thing: go to <b>Jobs</b> in the portal, click your job, and click <b>Cancel</b> so the GPU goes back. Your results are saved.</p>
+  </div>
+</div></div>
 
-<h2 id="assignment">Assignment</h2>
-<p class="lead">Students run every cell, then download their completed notebook (<code>01-fine-tune.ipynb</code>, with all outputs) and submit it. In Jupyter's file browser, right-click the notebook and choose <b>Download</b>.</p>
+<h2 id="reference">Reference</h2>
 
-<h2 id="breaks">If something breaks</h2>
+<div class="sub"><h4>How the notebook is wired</h4>
+<p>Read this once and the syntax stops being scary. The notebook itself does almost no machine learning. It <b>calls Python scripts</b> in the repo's <code>scripts/</code> folder and shows you what they print. That is the one idea that makes every code cell readable.</p>
+<p>Two pieces of Jupyter syntax do all of it:</p>
+<ul>
+  <li><b><code>!</code> at the start of a line</b> means "run this in the terminal, not in Python." So <code>!nvidia-smi</code> is the same as typing <code>nvidia-smi</code> at a shell prompt.</li>
+  <li><b><code>{SOMETHING}</code> inside a <code>!</code> line</b> means "paste in the Python variable named SOMETHING." So <code>!{PY} {REPO}/scripts/peek.py</code> becomes something like <code>/work/.../venv/bin/python /home/.../hpc-finetune-workshop/scripts/peek.py</code>.</li>
+</ul>
+<p>The <code>--word value</code> parts after a script name are <b>flags</b>: settings handed to the script, the same way <code>sbatch</code> takes <code>--nodes 4</code>. Each script reads its flags at the top (<code>ap.add_argument(...)</code> in the code), and any flag you don't pass uses its default.</p>
+</div>
+
+<div class="sub"><h4>Questions students actually ask</h4>
 <table>
-  <tr><th>What you see</th><th>Likely cause</th></tr>
-  <tr><td data-label="What you see">The job waits and never starts</td><td data-label="Likely cause">A typo in the allocation or reservation, or the student still has another job running</td></tr>
-  <tr><td data-label="What you see">"multiple projects" error</td><td data-label="Likely cause">The allocation box is empty or unchecked. It should say <code>TRA25001</code></td></tr>
-  <tr><td data-label="What you see"><code>destination path already exists</code></td><td data-label="Likely cause">The student already has the workshop folder. Just open it</td></tr>
-  <tr><td data-label="What you see">Can't submit, or Browse Files shows nothing</td><td data-label="Likely cause">TMS keys aren't set up. Redo student step 02</td></tr>
-  <tr><td data-label="What you see"><code>AssertionError: Can't see the shared folder</code></td><td data-label="Likely cause">The student is not on the allocation, or not in a compute-node session</td></tr>
-  <tr><td data-label="What you see">Cell stuck on <code>[*]</code> for a long time</td><td data-label="Likely cause">Still training. 60,000 examples takes about 4.5 minutes</td></tr>
+  <tr><th>Question</th><th>Short answer</th></tr>
+  <tr><td data-label="Question">Is this ChatGPT?</td><td data-label="Short answer">Same family of technology, much smaller (0.5 billion weights vs. hundreds of billions), and we turned it into a sorter, not a chatbot.</td></tr>
+  <tr><td data-label="Question">Did it memorize the answers?</td><td data-label="Short answer">No. The 3,000 test complaints are never in training. That's why the score means something.</td></tr>
+  <tr><td data-label="Question">Why does it need a GPU?</td><td data-label="Short answer">Each step is millions of multiplications. A GPU does thousands at once.</td></tr>
+  <tr><td data-label="Question">Why didn't we train all the weights?</td><td data-label="Short answer">Slower, more memory, and for one narrow job, LoRA gets most of the benefit at 0.44% of the cost.</td></tr>
+  <tr><td data-label="Question">Why is my number different from my neighbor's?</td><td data-label="Short answer">Training shuffles the data randomly, so runs land close but not identical.</td></tr>
+  <tr><td data-label="Question">Why did loss go up at the end?</td><td data-label="Short answer">Each loss is one batch; some batches are harder. Look at the trend.</td></tr>
+  <tr><td data-label="Question">Can it say "none of these"?</td><td data-label="Short answer">No. It was only ever given six choices.</td></tr>
+  <tr><td data-label="Question">Could it get to 100%?</td><td data-label="Short answer">Unlikely. Some complaints genuinely fit two categories; people would disagree on them too.</td></tr>
 </table>
+</div>
+
+<div class="sub" id="breaks"><h4>If something breaks</h4>
+<table>
+  <tr><th>What they see</th><th>What it means</th><th>Fix</th></tr>
+  <tr><td data-label="What they see">The job waits and never starts</td><td data-label="What it means">A typo in the allocation or reservation name</td><td data-label="Fix">Check <code>TRA25001</code> and your class's reservation name, then resubmit</td></tr>
+  <tr><td data-label="What they see"><code>AssertionError: Can't see the shared folder</code></td><td data-label="What it means">Session can't read <code>SHARED</code></td><td data-label="Fix">Check they're on the allocation and in a compute-node session, not a login node</td></tr>
+  <tr><td data-label="What they see"><code>score.weight MISSING</code> in red</td><td data-label="What it means">Normal</td><td data-label="Fix">Nothing. Say "that's the new layer"</td></tr>
+  <tr><td data-label="What they see">Cell stuck on <code>[*]</code> a long time</td><td data-label="What it means">Still training, or a big <code>TRAIN_EXAMPLES</code></td><td data-label="Fix">Look for step lines; 60,000 takes about 4.5 min</td></tr>
+  <tr><td data-label="What they see"><code>FileNotFoundError ... before/results.json</code> in Step 4</td><td data-label="What it means">They skipped Step 2</td><td data-label="Fix">Run Step 2, then Step 4</td></tr>
+  <tr><td data-label="What they see">Step 5 can't find <code>run1/adapter</code></td><td data-label="What it means">Step 3 didn't finish, or <code>--save-adapter</code> was removed</td><td data-label="Fix">Rerun Step 3</td></tr>
+  <tr><td data-label="What they see"><code>SyntaxError</code> in Step 5</td><td data-label="What it means">Missing quote or comma in <code>MY_COMPLAINTS</code></td><td data-label="Fix">Fix the line it points to</td></tr>
+</table>
+</div>
 
 </main>
+
 
 <footer><div class="wrap">Morehouse Supercomputing Facility</div></footer>
 
