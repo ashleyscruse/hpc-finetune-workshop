@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fine-Tune It: Instructor Guide</title>
+<style>
+  :root {
+    --maroon: #840028; --gold: #c1a231; --ink: #1a1a1a; --ink2: #4a4a4a;
+    --light: #f4f1f2; --line: #e2dade; --bg: #ffffff; --code-bg: #1d1416; --code-ink: #f6eef0;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 20px/1.55 Georgia, "Times New Roman", serif; }
+  header { background: var(--maroon); color: #fff; padding: 48px 16px 40px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+  .kicker { color: var(--gold); font: 700 15px/1.2 Arial, Helvetica, sans-serif; letter-spacing: .12em; }
+  h1 { font: 700 clamp(34px, 6vw, 56px)/1.05 Arial, Helvetica, sans-serif; text-transform: uppercase;
+       margin: 12px 0 14px; }
+  header p { margin: 0; font-size: 22px; }
+  nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+  nav a { color: #fff; border: 2px solid var(--gold); padding: 8px 16px; text-decoration: none;
+          font: 700 16px Arial, Helvetica, sans-serif; }
+  nav a:hover { background: var(--gold); color: var(--maroon); }
+  h2 { font: 700 30px/1.2 Arial, Helvetica, sans-serif; color: var(--maroon); text-transform: uppercase;
+       margin: 56px 0 6px; }
+  h2::after { content: ""; display: block; width: 72px; height: 6px; background: var(--gold); margin-top: 12px; }
+  .lead { color: var(--ink2); margin: 16px 0 8px; }
+  .step { display: grid; grid-template-columns: 64px 1fr; gap: 18px; background: var(--light);
+          border-left: 6px solid var(--maroon); padding: 22px 24px; margin: 18px 0; }
+  .num { font: 700 40px/1 Arial, Helvetica, sans-serif; color: var(--gold); }
+  .step h3 { font: 700 24px/1.25 Arial, Helvetica, sans-serif; color: var(--maroon); margin: 2px 0 8px; }
+  .step p { margin: 8px 0; }
+  .step > div { min-width: 0; }
+  code { font: 18px/1.5 Menlo, Consolas, monospace; background: #ece4e7; padding: 1px 6px; }
+  .code { position: relative; margin: 12px 0 4px; }
+  pre { background: var(--code-bg); color: var(--code-ink); margin: 0; padding: 46px 20px 18px;
+        overflow-x: auto; font: 17px/1.55 Menlo, Consolas, monospace; }
+  pre code { background: none; padding: 0; font: inherit; }
+  .copy { position: absolute; top: 10px; right: 10px; background: var(--gold); color: var(--maroon);
+          border: 0; font: 700 14px Arial, Helvetica, sans-serif; padding: 6px 12px; cursor: pointer; }
+  .note { background: var(--maroon); color: #fff; padding: 18px 24px; margin: 22px 0;
+          border-left: 6px solid var(--gold); }
+  .note b { color: var(--gold); font-family: Arial, Helvetica, sans-serif; letter-spacing: .06em; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 19px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 700 16px Arial, Helvetica, sans-serif; color: var(--maroon); text-transform: uppercase;
+       letter-spacing: .05em; }
+  figure { margin: 14px 0 18px; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); background: #fff; }
+  figcaption { font: 15px/1.4 Arial, Helvetica, sans-serif; color: var(--ink2); margin-top: 6px; }
+  .sub { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 16px; }
+  .sub h4 { font: 700 20px/1.3 Arial, Helvetica, sans-serif; color: var(--maroon); margin: 0 0 6px; }
+  .heads-up { background: #fff; border: 2px solid var(--gold); padding: 12px 16px; margin: 12px 0; font-size: 18px; }
+  footer { margin-top: 64px; padding: 26px 16px; background: var(--light); color: var(--ink2);
+           font: 700 13px Arial, Helvetica, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .fields td:first-child { white-space: nowrap; font-weight: bold; }
+  ul { margin: 8px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  td, th { overflow-wrap: anywhere; }
+  @media (max-width: 600px) {
+    .fields td:first-child { white-space: normal; }
+    body { font-size: 18px; }
+    .step { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
+    .num { font-size: 30px; }
+    table, tbody, tr, td { display: block; width: 100%; }
+    table { font-size: 17px; }
+    tr:first-child { display: none; }
+    tr { border-bottom: 2px solid var(--line); padding: 8px 0; }
+    td { border: 0; padding: 4px 0; }
+    td[data-label]::before { content: attr(data-label); display: block;
+      font: 700 13px Arial, Helvetica, sans-serif; color: var(--maroon);
+      text-transform: uppercase; letter-spacing: .05em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">INSTRUCTOR GUIDE</div>
+    <h1>Fine-Tune It:<br>Instructor Guide</h1>
+    <p>How to run the fine-tuning workshop in your class.</p>
+    <nav>
+      <a href="#before">Before class</a>
+      <a href="#versions">Versions</a>
+      <a href="#assignment">Assignment</a>
+      <a href="#breaks">If something breaks</a>
+      <a href="./">Student guide</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<p class="lead">Students fine-tune a small open language model (Qwen2.5-0.5B, LoRA) on one Vista GPU to sort real CFPB consumer complaints into six categories. They score it before (about 17%, chance) and after (about 73% in the dry run), then test it on complaints they write.</p>
+<p>Everything runs from <code>notebooks/01-fine-tune.ipynb</code>. Slides are shared separately by Dr. Scruse (Google Slides); one deck per version.</p>
+
+<h2 id="before">Before class</h2>
+
+<div class="step"><div class="num">01</div><div>
+  <h3>Reservation</h3>
+  <p>Dr. Scruse submits a Vista reservation for each class date. Students enter allocation <code>TRA25001</code> and that class's reservation name in the portal.</p>
+  <div class="heads-up">The student page and screenshots show reservation <code>HCSC106</code> (from the CSC 106 run). Tell students the reservation name for their class.</div>
+</div></div>
+
+<div class="step"><div class="num">02</div><div>
+  <h3>Shared environment</h3>
+  <p>The notebook points <code>SHARED</code> at:</p>
+  <div class="code"><button class="copy">Copy</button><pre><code>/work/10539/ashleyscruse/vista/inspire-shared</code></pre></div>
+  <p>It holds the data, model, and Python, and it is already built. To rebuild elsewhere, run <code>scripts/setup_shared.sh</code> from a GPU compute-node session (see the README).</p>
+</div></div>
+
+<div class="step"><div class="num">03</div><div>
+  <h3>Student logins</h3>
+  <p>Every student logs in to the portal, finishes MFA, and connects their account to Vista <b>before class</b>.</p>
+  <p><b>Pre-work, graded:</b> a screenshot of their account at <code>accounts.tacc.utexas.edu</code> showing they can log in and that MFA uses an authenticator app (Okta Verify or Google Authenticator). Never SMS.</p>
+  <p>In CSC 106 the first part of class went to logins. With logins done ahead, the notebook fits in 50 minutes.</p>
+</div></div>
+
+<div class="step"><div class="num">04</div><div>
+  <h3>Run-through</h3>
+  <p>Run the notebook once from a student-like account and time Step 3 (training). Training on 6,000 examples took about 27 seconds on one GPU.</p>
+</div></div>
+
+<h2 id="versions">Versions</h2>
+
+<table>
+  <tr><th>Version</th><th>Course</th><th>Length</th><th>Deck file</th><th>Notebook steps</th></tr>
+  <tr><td data-label="Version"><b>Intro CS</b></td><td data-label="Course">CSC 106</td><td data-label="Length">75 min</td><td data-label="Deck file"><code>intro-cs-fine-tune.pptx</code></td><td data-label="Notebook steps">0 to 5</td></tr>
+  <tr><td data-label="Version"><b>Ethics</b></td><td data-label="Course">Computer Ethics</td><td data-label="Length">50 min</td><td data-label="Deck file"><code>ethics-fine-tune.pptx</code></td><td data-label="Notebook steps">0 to 5 (skip 6)</td></tr>
+  <tr><td data-label="Version"><b>SWE</b></td><td data-label="Course">Software Engineering and Advanced Software Engineering</td><td data-label="Length">About 2.5 hours</td><td data-label="Deck file"><code>swe-fine-tune.pptx</code></td><td data-label="Notebook steps">0 to 6</td></tr>
+</table>
+
+<div class="step"><div class="num">A</div><div>
+  <h3>Intro CS (CSC 106)</h3>
+  <p><b>75 minutes.</b> Deck: <code>intro-cs-fine-tune.pptx</code></p>
+  <p><b>Focus:</b> how supercomputers train AI and what fine-tuning is.</p>
+  <p><b>Run:</b> Steps 0 to 5.</p>
+  <p><b>Close:</b> what changed between before and after.</p>
+</div></div>
+
+<div class="step"><div class="num">B</div><div>
+  <h3>Computer Ethics</h3>
+  <p><b>50 minutes.</b> Deck: <code>ethics-fine-tune.pptx</code></p>
+  <p><b>Focus:</b> the ethics of fine-tuning: where the data came from and consent, who gets misclassified, who is accountable.</p>
+  <p><b>Run:</b> Steps 0 to 5. Skip Step 6. In Step 5, students try to break the model: vague complaints, two problems at once, slang.</p>
+  <p><b>Close:</b> three discussion questions.</p>
+  <ul><li>What broke it?</li><li>Who should check?</li><li>Would you deploy it?</li></ul>
+</div></div>
+
+<div class="step"><div class="num">C</div><div>
+  <h3>Software Engineering and Advanced Software Engineering</h3>
+  <p><b>About 2.5 hours.</b> Deck: <code>swe-fine-tune.pptx</code></p>
+  <p><b>Focus:</b> how fine-tuned models benefit software: where a model fits in an app, a fine-tuned small model vs a big chat API, and shipping it (tests, versioning the adapter, drift).</p>
+  <p><b>Run:</b> Steps 0 to 6. In Step 6 each student changes one setting (more data, shorter input, or more passes) and compares results like an A/B test.</p>
+  <p><b>Close:</b></p>
+  <ul><li>What would you build?</li><li>What did your experiment show?</li><li>When would you skip it?</li></ul>
+</div></div>
+
+<div class="note"><b>NOTE</b>&nbsp; Session 2 (<code>notebooks/02-make-it-faster.ipynb</code>, multi-node scaling) needs 4 GPU nodes per team and is not part of these class versions.</div>
+
+<h2 id="assignment">Assignment</h2>
+<p class="lead">Students run every cell, then download their completed notebook (<code>01-fine-tune.ipynb</code>, with all outputs) and submit it. In Jupyter's file browser, right-click the notebook and choose <b>Download</b>.</p>
+
+<h2 id="breaks">If something breaks</h2>
+<table>
+  <tr><th>What you see</th><th>Likely cause</th></tr>
+  <tr><td data-label="What you see">The job waits and never starts</td><td data-label="Likely cause">A typo in the allocation or reservation, or the student still has another job running</td></tr>
+  <tr><td data-label="What you see">"multiple projects" error</td><td data-label="Likely cause">The allocation box is empty or unchecked. It should say <code>TRA25001</code></td></tr>
+  <tr><td data-label="What you see"><code>destination path already exists</code></td><td data-label="Likely cause">The student already has the workshop folder. Just open it</td></tr>
+  <tr><td data-label="What you see">Can't submit, or Browse Files shows nothing</td><td data-label="Likely cause">TMS keys aren't set up. Redo student step 02</td></tr>
+  <tr><td data-label="What you see"><code>AssertionError: Can't see the shared folder</code></td><td data-label="Likely cause">The student is not on the allocation, or not in a compute-node session</td></tr>
+  <tr><td data-label="What you see">Cell stuck on <code>[*]</code> for a long time</td><td data-label="Likely cause">Still training. 60,000 examples takes about 4.5 minutes</td></tr>
+</table>
+
+</main>
+
+<footer><div class="wrap">Morehouse Supercomputing Facility</div></footer>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.parentElement.querySelector('code').innerText;
+      try {
+        navigator.clipboard.writeText(t).then(function () {
+          b.textContent = 'Copied';
+          setTimeout(function () { b.textContent = 'Copy'; }, 1500);
+        });
+      } catch (e) {}
+    });
+  });
+</script>
+</body>
+</html>
